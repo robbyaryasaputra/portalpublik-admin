@@ -172,12 +172,21 @@
             box-sizing: border-box;
         }
 
+        /* ===== AWAL PERUBAHAN CSS ===== */
         button[type="submit"] {
+            /* [DIUBAH] Menggunakan flexbox untuk mensejajarkan ikon dan teks */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem; /* [BARU] Memberi jarak antara ikon dan teks */
+
             background-color: var(--primary-color); /* Warna tombol pink */
             color: #fff;
             border: 2px solid var(--primary-color);
             box-shadow: 0 4px 6px rgba(233, 30, 99, 0.2); /* Shadow tombol pink */
         }
+        /* ===== AKHIR PERUBAHAN CSS ===== */
+
 
         button[type="submit"]:hover {
             background-color: var(--primary-color-dark); /* Warna hover pink lebih gelap */
@@ -270,8 +279,16 @@
                         <div class="error-message">{{ $message }}</div>
                     @enderror
                 </div>
-                <button type="submit">Login</button>
-            </form>
+
+                <button type="submit">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="btn-icon">
+                        <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"></path>
+                        <polyline points="10 17 15 12 10 7"></polyline>
+                        <line x1="15" y1="12" x2="3" y2="12"></line>
+                    </svg>
+                    <span>Login</span>
+                </button>
+                </form>
 
             <div class="login-footer">
                 <span>&copy; {{ date('Y') }} Portal Publik.</span>

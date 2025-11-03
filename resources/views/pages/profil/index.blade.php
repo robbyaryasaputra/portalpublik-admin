@@ -6,10 +6,11 @@
   <div class="card">
     <div class="card-header d-flex justify-content-between align-items-center">
       <h4>Daftar Profil</h4>
+
       <a href="{{ route('profil.create') }}" class="btn btn-primary btn-action">
-        <i class="material-icons opacity-10 me-1">add_business</i> Tambah Profil
+        <i class="material-icons opacity-10 me-1">add</i> Tambah Profil
       </a>
-    </div>
+      </div>
     <div class="card-body">
       @if(session('success'))
         <div class="alert alert-success">{{ session('success') }}</div>

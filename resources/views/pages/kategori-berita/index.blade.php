@@ -9,10 +9,11 @@
             <div class="card mb-4">
                 <div class="card-header d-flex justify-content-between align-items-center">
                     <h6 class="mb-0">Daftar Kategori Berita</h6>
+
                     <a href="{{ route('kategori-berita.create') }}" class="btn btn-sm btn-primary">
-                        <i class="material-icons opacity-10 me-1">category</i> Tambah Kategori
+                        <i class="material-icons opacity-10 me-1">add</i> Tambah Kategori
                     </a>
-                </div>
+                    </div>
                 <div class="card-body">
                     @if(session('success'))
                         <div class="alert alert-success">{{ session('success') }}</div>

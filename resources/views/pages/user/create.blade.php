@@ -13,7 +13,7 @@
         <div class="card-header"><h6>Tambah User</h6></div>
         <div class="card-body">
           @if($errors->any())<div class="alert alert-danger"><ul>@foreach($errors->all() as $err)<li>{{ $err }}</li>@endforeach</ul></div>@endif
-          
+
           <form action="{{ route('user.store') }}" method="POST" class="form-dark-pink">
             {{-- ========== AWAL KODE DARI _form.blade.php ========== --}}
             @csrf
@@ -22,7 +22,7 @@
                 $name = old('name', '');
                 $email = old('email', '');
             @endphp
-            
+
             <div class="row">
                 <div class="col-md-6">
                     <div class="form-group">
@@ -37,7 +37,7 @@
                     </div>
                 </div>
             </div>
-            
+
             <div class="row mt-3">
                 <div class="col-md-6">
                     <div class="form-group">
@@ -55,10 +55,16 @@
 
             {{-- Menambahkan tombol Simpan --}}
             <div class="mt-4">
-                <button type="submit" class="btn btn-primary">Simpan</button>
-                <a href="{{ route('user.index') }}" class="btn btn-secondary">Batal</a>
+                <button type="submit" class="btn btn-primary">
+                    <i class="material-icons opacity-10 me-1">save</i>
+                    Simpan
+                </button>
+                <a href="{{ route('user.index') }}" class="btn btn-secondary">
+                    <i class="material-icons opacity-10 me-1">undo</i>
+                    Batal
+                </a>
             </div>
-          </form>
+            </form>
         </div>
       </div>
     </div>

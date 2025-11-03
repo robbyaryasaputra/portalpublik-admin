@@ -9,11 +9,11 @@
     <div class="card-header"><h4>Edit Warga</h4></div>
     <div class="card-body">
       @if($errors->any())<div class="alert alert-danger"><ul>@foreach($errors->all() as $err)<li>{{ $err }}</li>@endforeach</ul></div>@endif
-      
+
       <form action="{{ route('warga.update', $warga) }}" method="POST" class="warga-form">
-            @csrf 
+            @csrf
             @method('PUT')
-            
+
             <div class="row">
               <div class="mb-3 col-6">
                 <label class="form-label">Nama</label>
@@ -27,14 +27,17 @@
                 <label class="form-label">No. KK</label>
                 <input type="text" name="no_kk" value="{{ old('no_kk', isset($warga) ? $warga->no_kk : '') }}" class="form-control" placeholder="16 digit No. KK...">
               </div>
-              
-              {{-- [PERUBAHAN] Menggunakan form-select untuk Jenis Kelamin --}}
+
+              {{-- [AWAL PERUBAHAN] - Memperbaiki logika old() helper untuk dropdown --}}
               <div class="mb-3 col-6">
                 <label class="form-label">Jenis Kelamin</label>
-                <select name="jenis_kelamin" class="form-select">
-                    <option value="" {{ old('jenis_kelamin', $warga->jenis_kelamin) == '' ? 'selected' : '' }} disabled>Pilih Jenis Kelamin...</option>
-                    <option value="Laki-laki" {{ old('jenis_kelamin', $warga->jenis_kelamin) == 'Laki-laki' ? 'selected' : '' }}>Laki-laki</option>
-                    <option value="Perempuan" {{ old('jenis_kelamin', $warga->jenis_kelamin) == 'Perempuan' ? 'selected' : '' }}>Perempuan</option>
+                @php
+                  $jenis_kelamin = old('jenis_kelamin', isset($warga) ? $warga->jenis_kelamin : '');
+                @endphp
+                <select name="jenis_kelamin" class="form-control" required>
+                    <option value="" disabled {{ $jenis_kelamin == '' ? 'selected' : '' }}>-- Pilih Jenis Kelamin --</option>
+                    <option value="Laki-laki" {{ $jenis_kelamin == 'Laki-laki' ? 'selected' : '' }}>Laki-laki</option>
+                    <option value="Perempuan" {{ $jenis_kelamin == 'Perempuan' ? 'selected' : '' }}>Perempuan</option>
                 </select>
               </div>
               {{-- [AKHIR PERUBAHAN] --}}
@@ -57,10 +60,15 @@
               </div>
             </div>
 
-            <button class="btn btn-primary btn-action mt-3">Update</button>
-            <a href="{{ route('warga.index') }}" class="btn btn-secondary btn-action mt-3">Batal</a>
-      </form>
-
+            <button class="btn btn-primary btn-action mt-3">
+                <i class="material-icons opacity-10 me-1">save</i>
+                Update
+            </button>
+            <a href="{{ route('warga.index') }}" class="btn btn-secondary btn-action mt-3">
+                <i class="material-icons opacity-10 me-1">undo</i>
+                Batal
+            </a>
+            </form>
     </div>
   </div>
 </div>

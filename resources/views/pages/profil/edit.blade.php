@@ -8,9 +8,9 @@
     <div class="card-body">
       @if($errors->any())<div class="alert alert-danger"><ul>@foreach($errors->all() as $err)<li>{{ $err }}</li>@endforeach</ul></div>@endif
       <form action="{{ route('profil.update', $profil) }}" method="POST" enctype="multipart/form-data">
-        @csrf 
+        @csrf
         @method('PUT')
-        
+
         {{-- ========== AWAL KODE DARI _form.blade.php ========== --}}
         {{-- Blok <style> dipindahkan ke css.blade.php --}}
 
@@ -66,9 +66,15 @@
         </div>
         {{-- ========== AKHIR KODE DARI _form.blade.php ========== --}}
 
-        <button class="btn btn-primary btn-action mt-3">Update</button>
-        <a href="{{ route('profil.index') }}" class="btn btn-secondary btn-action mt-3">Batal</a>
-      </form>
+        <button class="btn btn-primary btn-action mt-3">
+            <i class="material-icons opacity-10 me-1">save</i>
+            Update
+        </button>
+        <a href="{{ route('profil.index') }}" class="btn btn-secondary btn-action mt-3">
+            <i class="material-icons opacity-10 me-1">undo</i>
+            Batal
+        </a>
+        </form>
     </div>
   </div>
 </div>

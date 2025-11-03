@@ -27,7 +27,7 @@
                         <div class="form-panel">
                         {{-- ========== AWAL KODE DARI _form.blade.php ========== --}}
                         @csrf
-                        
+
                         @php
                             $nama = old('nama', isset($item) ? $item->nama : '');
                             $slug = old('slug', isset($item) ? $item->slug : '');
@@ -62,8 +62,14 @@
                         </div>
 
                         <div class="mt-3">
-                            <button type="submit" class="btn btn-primary btn-action">Simpan</button>
-                            <a href="{{ route('kategori-berita.index') }}" class="btn btn-secondary">Batal</a>
+                            <button type="submit" class="btn btn-primary btn-action">
+                                <i class="material-icons opacity-10 me-1">save</i>
+                                Simpan
+                            </button>
+                            <a href="{{ route('kategori-berita.index') }}" class="btn btn-secondary">
+                                <i class="material-icons opacity-10 me-1">undo</i>
+                                Batal
+                            </a>
                         </div>
                         </div>
                         {{-- ========== AKHIR KODE DARI _form.blade.php ========== --}}

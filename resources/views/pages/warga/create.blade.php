@@ -9,10 +9,10 @@
     <div class="card-header"><h4>Tambah Warga</h4></div>
     <div class="card-body">
       @if($errors->any())<div class="alert alert-danger"><ul>@foreach($errors->all() as $err)<li>{{ $err }}</li>@endforeach</ul></div>@endif
-      
+
       <form action="{{ route('warga.store') }}" method="POST" class="warga-form">
             @csrf
-            
+
             <div class="row">
               <div class="mb-3 col-6">
                 <label class="form-label">Nama</label>
@@ -26,12 +26,10 @@
                 <label class="form-label">No. KK</label>
                 <input type="text" name="no_kk" value="{{ old('no_kk') }}" class="form-control" placeholder="16 digit No. KK...">
               </div>
-              
-              {{-- [PERUBAHAN] Menggunakan form-select untuk Jenis Kelamin --}}
               <div class="mb-3 col-6">
                 <label class="form-label">Jenis Kelamin</label>
-                <select name="jenis_kelamin" class="form-select">
-                    <option value="" {{ old('jenis_kelamin') == '' ? 'selected' : '' }} disabled>Pilih Jenis Kelamin...</option>
+                <select name="jenis_kelamin" class="form-control" required>
+                    <option value="" disabled selected>-- Pilih Jenis Kelamin --</option>
                     <option value="Laki-laki" {{ old('jenis_kelamin') == 'Laki-laki' ? 'selected' : '' }}>Laki-laki</option>
                     <option value="Perempuan" {{ old('jenis_kelamin') == 'Perempuan' ? 'selected' : '' }}>Perempuan</option>
                 </select>
@@ -55,10 +53,15 @@
               </div>
             </div>
 
-            <button type="submit" class="btn btn-primary btn-action mt-3">Simpan</button>
-            <a href="{{ route('warga.index') }}" class="btn btn-secondary btn-action mt-3">Batal</a>
-      </form>
-
+            <button type="submit" class="btn btn-primary btn-action mt-3">
+                <i class="material-icons opacity-10 me-1">save</i>
+                Simpan
+            </button>
+            <a href="{{ route('warga.index') }}" class="btn btn-secondary btn-action mt-3">
+                <i class="material-icons opacity-10 me-1">undo</i>
+                Batal
+            </a>
+            </form>
     </div>
   </div>
 </div>

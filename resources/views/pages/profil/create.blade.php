@@ -9,7 +9,7 @@
       @if($errors->any())<div class="alert alert-danger"><ul>@foreach($errors->all() as $err)<li>{{ $err }}</li>@endforeach</ul></div>@endif
       <form action="{{ route('profil.store') }}" method="POST" enctype="multipart/form-data">
         @csrf
-        
+
         {{-- ========== AWAL KODE DARI _form.blade.php ========== --}}
         {{-- Blok <style> dipindahkan ke css.blade.php --}}
 
@@ -66,10 +66,16 @@
         {{-- ========== AKHIR KODE DARI _form.blade.php ========== --}}
 
         <div class="mt-4">
-                <button type="submit" class="btn btn-primary">Simpan</button>
-                <a href="{{ route('profil.index') }}" class="btn btn-secondary">Batal</a>
-            </div>
-      </form>
+            <button type="submit" class="btn btn-primary">
+                <i class="material-icons opacity-10 me-1">save</i>
+                Simpan
+            </button>
+            <a href="{{ route('profil.index') }}" class="btn btn-secondary">
+                <i class="material-icons opacity-10 me-1">undo</i>
+                Batal
+            </a>
+        </div>
+        </form>
     </div>
   </div>
 </div>
