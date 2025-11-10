@@ -6,6 +6,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\WargaController;
 use App\Http\Controllers\ProfilController;
 use App\Http\Controllers\KategoriBeritaController;
+use App\Http\Controllers\BeritaController;
 use App\Http\Controllers\UserController;
 
 Route::get('/', function () {
@@ -31,3 +32,10 @@ Route::resource('kategori-berita', KategoriBeritaController::class);
 
 // Resource routes untuk CRUD User
 Route::resource('user', UserController::class);
+
+// Resource routes untuk CRUD Berita
+Route::resource('berita', BeritaController::class);
+
+// Additional routes untuk manajemen status berita
+Route::patch('/berita/{berita}/publish', [BeritaController::class, 'publish'])->name('berita.publish');
+Route::patch('/berita/{berita}/draft', [BeritaController::class, 'draft'])->name('berita.draft');
