@@ -2,100 +2,112 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Berita;
-use App\Models\KategoriBerita;
 use Illuminate\Http\Request;
-use Illuminate\Support\Str;
+use App\Models\Berita;
+use App\Models\KategoriBerita; // <-- Penting: Ambil model Kategori
+use Illuminate\Support\Str; // <-- Penting: Untuk membuat slug
 
 class BeritaController extends Controller
 {
+    /**
+     * Menampilkan daftar berita
+     */
     public function index()
     {
-        $beritas = Berita::with('kategori')
-                        ->orderBy('berita_id', 'desc')
-                        ->paginate(10);
-        return view('pages.berita.index', compact('beritas'));
+        // Gunakan 'with' untuk eager loading relasi kategoriBerita
+        $items = Berita::with('kategoriBerita')
+                       ->orderBy('berita_id', 'desc')
+                       ->paginate(15);
+
+        return view('pages.berita.index', compact('items'));
     }
 
+    /**
+     * Menampilkan form untuk membuat berita baru
+     */
     public function create()
     {
-        $kategoris = KategoriBerita::orderBy('nama')->get();
-        return view('pages.berita.create', compact('kategoris'));
+        // V Ambil semua kategori untuk ditampilkan di dropdown
+        $kategori = KategoriBerita::orderBy('nama', 'asc')->get();
+        return view('pages.berita.create', compact('kategori')); // <-- Data dikirim ke view
     }
 
+    /**
+     * Menyimpan berita baru ke database
+     */
     public function store(Request $request)
     {
         $data = $request->validate([
-            'kategori_id' => 'required|exists:kategori_beritas,kategori_id',
             'judul' => 'required|string|max:255',
             'slug' => 'nullable|string|max:255|unique:beritas,slug',
-            'isi_html' => 'required|string',
+            'kategori_id' => 'required|integer|exists:kategori_beritas,kategori_id',
+            'isi_html' => 'nullable|string',
             'penulis' => 'nullable|string|max:100',
-            'status' => 'required|in:draft,published',
+            'status' => 'required|string|in:draft,published', // Sesuaikan status
             'terbit_at' => 'nullable|date',
         ]);
 
-        // Generate slug if not provided
+        // Jika slug kosong, buat dari judul
         if (empty($data['slug'])) {
             $data['slug'] = Str::slug($data['judul']);
-        }
-
-        // Set terbit_at if status is published and terbit_at is not set
-        if ($data['status'] === 'published' && empty($data['terbit_at'])) {
-            $data['terbit_at'] = now();
         }
 
         Berita::create($data);
 
-        return redirect()
-            ->route('berita.index')
-            ->with('success', 'Berita berhasil ditambahkan.');
+        return redirect()->route('berita.index')->with('success', 'Berita berhasil ditambahkan');
     }
 
-    public function show(Berita $berita)
+    /**
+     * (Opsional) Menampilkan satu berita
+     */
+    public function show(Berita $beritum)
     {
-
+        // return view('pages.berita.show', ['item' => $beritum]);
     }
 
-    public function edit(Berita $berita)
+    /**
+     * Menampilkan form edit
+     */
+    public function edit(Berita $beritum)
     {
-        $kategoris = KategoriBerita::orderBy('nama')->get();
-        return view('pages.berita.edit', compact('berita', 'kategoris'));
+        // V Ambil semua kategori untuk ditampilkan di dropdown
+        $kategori = KategoriBerita::orderBy('nama', 'asc')->get();
+        return view('pages.berita.edit', [
+            'item' => $beritum,
+            'kategori' => $kategori // <-- Data dikirim ke view
+        ]);
     }
 
-    public function update(Request $request, Berita $berita)
+    /**
+     * Memperbarui berita
+     */
+    public function update(Request $request, Berita $beritum)
     {
         $data = $request->validate([
-            'kategori_id' => 'required|exists:kategori_beritas,kategori_id',
             'judul' => 'required|string|max:255',
-            'slug' => 'nullable|string|max:255|unique:beritas,slug,' . $berita->berita_id . ',berita_id',
-            'isi_html' => 'required|string',
+            'slug' => 'nullable|string|max:255|unique:beritas,slug,' . $beritum->berita_id . ',berita_id',
+            'kategori_id' => 'required|integer|exists:kategori_beritas,kategori_id',
+            'isi_html' => 'nullable|string',
             'penulis' => 'nullable|string|max:100',
+            'status' => 'required|string|in:draft,published',
+            'terbit_at' => 'nullable|date',
         ]);
 
-        // Generate slug if not provided
         if (empty($data['slug'])) {
             $data['slug'] = Str::slug($data['judul']);
         }
 
-        // Preserve existing status and terbit_at
-        $data['status'] = $berita->status;
-        $data['terbit_at'] = $berita->terbit_at;
+        $beritum->update($data);
 
-        $berita->update($data);
-
-        return redirect()
-            ->route('berita.index')
-            ->with('success', 'Berita berhasil diperbarui.');
+        return redirect()->route('berita.index')->with('success', 'Berita berhasil diperbarui');
     }
 
-    public function destroy(Berita $berita)
+    /**
+     * Menghapus berita
+     */
+    public function destroy(Berita $beritum)
     {
-        $berita->delete();
-        return redirect()
-            ->route('berita.index')
-            ->with('success', 'Berita berhasil dihapus.');
+        $beritum->delete();
+        return redirect()->route('berita.index')->with('success', 'Berita berhasil dihapus');
     }
-
-    // No additional methods needed
 }

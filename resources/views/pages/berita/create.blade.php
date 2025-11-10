@@ -1,118 +1,124 @@
 @extends('layouts.admin.app')
 
+@section('page-title', 'Tambah Berita')
+
 @section('content')
-<div class="container-fluid">
-    <div class="d-sm-flex align-items-center justify-content-between mb-4">
-        <h1 class="h3 mb-0 text-gray-800">Tambah Berita</h1>
-        <a href="{{ route('berita.index') }}" class="btn btn-secondary">
-            <i class="fas fa-arrow-left fa-sm text-white-50 me-2"></i>Kembali
-        </a>
-    </div>
-
-    <div class="card shadow mb-4">
-        <div class="card-body">
-            <form action="{{ route('berita.store') }}" method="POST">
-                @csrf
-
-                <div class="mb-3">
-                    <label for="kategori_id" class="form-label">Kategori</label>
-                    <select name="kategori_id" id="kategori_id" class="form-control @error('kategori_id') is-invalid @enderror" required>
-                        <option value="">Pilih Kategori</option>
-                        @foreach($kategoris as $kategori)
-                            <option value="{{ $kategori->kategori_id }}" {{ old('kategori_id') == $kategori->kategori_id ? 'selected' : '' }}>
-                                {{ $kategori->nama }}
-                            </option>
-                        @endforeach
-                    </select>
-                    @error('kategori_id')
-                        <div class="invalid-feedback">{{ $message }}</div>
-                    @enderror
+<div class="container-fluid py-4">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h6>Tulis Berita Baru</h6>
                 </div>
+                <div class="card-body">
+                    @if($errors->any())
+                        <div class="alert alert-danger">
+                            <ul class="mb-0">
+                                @foreach($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    @endif
 
-                <div class="mb-3">
-                    <label for="judul" class="form-label">Judul</label>
-                    <input type="text" class="form-control @error('judul') is-invalid @enderror"
-                           id="judul" name="judul" value="{{ old('judul') }}" required>
-                    @error('judul')
-                        <div class="invalid-feedback">{{ $message }}</div>
-                    @enderror
-                </div>
+                    <form action="{{ route('berita.store') }}" method="POST">
+                        @csrf
+                        <div class="form-panel">
 
-                <div class="mb-3">
-                    <label for="slug" class="form-label">Slug (Opsional)</label>
-                    <input type="text" class="form-control @error('slug') is-invalid @enderror"
-                           id="slug" name="slug" value="{{ old('slug') }}">
-                    <small class="text-muted">Biarkan kosong untuk generate otomatis dari judul</small>
-                    @error('slug')
-                        <div class="invalid-feedback">{{ $message }}</div>
-                    @enderror
-                </div>
+                        {{-- ========== FORMULIR BERITA ========== --}}
+                        @php
+                            // Variabel $item tidak ada saat 'create', jadi kita set default
+                            $judul = old('judul', isset($item) ? $item->judul : '');
+                            $slug = old('slug', isset($item) ? $item->slug : '');
+                            $kategori_id = old('kategori_id', isset($item) ? $item->kategori_id : '');
+                            $penulis = old('penulis', isset($item) ? $item->penulis : '');
+                            $status = old('status', isset($item) ? $item->status : 'draft');
+                            // Format tanggal untuk input datetime-local
+                            $terbit_at = old('terbit_at', isset($item) && $item->terbit_at ? \Carbon\Carbon::parse($item->terbit_at)->format('Y-m-d\TH:i') : '');
+                            $isi_html = old('isi_html', isset($item) ? $item->isi_html : '');
+                        @endphp
 
-                <div class="mb-3">
-                    <label for="isi_html" class="form-label">Isi Berita</label>
-                    <textarea class="form-control @error('isi_html') is-invalid @enderror"
-                              id="isi_html" name="isi_html" rows="10" required>{{ old('isi_html') }}</textarea>
-                    @error('isi_html')
-                        <div class="invalid-feedback">{{ $message }}</div>
-                    @enderror
-                </div>
+                        <div class="row">
+                            <div class="col-md-8">
+                                <div class="form-group">
+                                    <label for="judul">Judul Berita</label>
+                                    <input id="judul" name="judul" type="text" class="form-control" value="{{ $judul }}" placeholder="Tulis judul berita di sini..." required>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label for="slug">Slug (opsional)</label>
+                                    <input id="slug" name="slug" type="text" class="form-control" value="{{ $slug }}" placeholder="[Otomatis jika dikosongkan]">
+                                </div>
+                            </div>
+                        </div>
 
-                <div class="mb-3">
-                    <label for="penulis" class="form-label">Penulis (Opsional)</label>
-                    <input type="text" class="form-control @error('penulis') is-invalid @enderror"
-                           id="penulis" name="penulis" value="{{ old('penulis') }}">
-                    @error('penulis')
-                        <div class="invalid-feedback">{{ $message }}</div>
-                    @enderror
-                </div>
+                        <div class="row mt-3">
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label for="kategori_id">Kategori</label>
+                                    <select name="kategori_id" id="kategori_id" class="form-control" required>
+                                        <option value="">-- Pilih Kategori --</option>
+                                        @foreach($kategori as $kat)
+                                            <option value="{{ $kat->kategori_id }}" {{ $kategori_id == $kat->kategori_id ? 'selected' : '' }}>
+                                                {{ $kat->nama }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label for="penulis">Penulis (opsional)</label>
+                                    <input id="penulis" name="penulis" type="text" class="form-control" value="{{ $penulis }}" placeholder="Nama penulis">
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label for="status">Status</label>
+                                    <select name="status" id="status" class="form-control" required>
+                                        <option value="draft" {{ $status == 'draft' ? 'selected' : '' }}>Draft</option>
+                                        <option value="published" {{ $status == 'published' ? 'selected' : '' }}>Published</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
 
-                <div class="mb-3">
-                    <label for="status" class="form-label">Status</label>
-                    <select name="status" id="status" class="form-control @error('status') is-invalid @enderror" required>
-                        <option value="draft" {{ old('status') == 'draft' ? 'selected' : '' }}>Draft</option>
-                        <option value="published" {{ old('status') == 'published' ? 'selected' : '' }}>Publikasikan</option>
-                    </select>
-                    @error('status')
-                        <div class="invalid-feedback">{{ $message }}</div>
-                    @enderror
-                </div>
+                        <div class="row mt-3">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label for="terbit_at">Tanggal Terbit (opsional)</label>
+                                    <input id="terbit_at" name="terbit_at" type="datetime-local" class="form-control" value="{{ $terbit_at }}">
+                                </div>
+                            </div>
+                        </div>
 
-                <div class="mb-3">
-                    <label for="terbit_at" class="form-label">Tanggal Terbit (Opsional)</label>
-                    <input type="datetime-local" class="form-control @error('terbit_at') is-invalid @enderror"
-                           id="terbit_at" name="terbit_at" value="{{ old('terbit_at') }}">
-                    <small class="text-muted">Biarkan kosong untuk menggunakan waktu saat ini ketika dipublikasikan</small>
-                    @error('terbit_at')
-                        <div class="invalid-feedback">{{ $message }}</div>
-                    @enderror
-                </div>
+                        <div class="row mt-3">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label for="isi_html">Isi Berita</label>
+                                    <textarea id="isi_html" name="isi_html" class="form-control" rows="10" placeholder="Tulis isi berita di sini...">{{ $isi_html }}</textarea>
+                                    <small>Disarankan menggunakan Rich Text Editor (seperti CKEditor/TinyMCE) untuk field ini.</small>
+                                </div>
+                            </div>
+                        </div>
+                        {{-- ========== AKHIR FORMULIR BERITA ========== --}}
 
-                <div class="d-flex justify-content-end">
-                    <button type="submit" class="btn btn-primary">Simpan Berita</button>
+                        <div class="mt-3">
+                            <button type="submit" class="btn btn-primary btn-action">
+                                <i class="material-icons opacity-10 me-1">save</i>
+                                Simpan
+                            </button>
+                            <a href="{{ route('berita.index') }}" class="btn btn-secondary">
+                                <i class="material-icons opacity-10 me-1">undo</i>
+                                Batal
+                            </a>
+                        </div>
+                        </div>
+                    </form>
                 </div>
-            </form>
+            </div>
         </div>
     </div>
 </div>
-
-@push('scripts')
-<script>
-    // Initialize CKEditor for rich text editing
-    ClassicEditor
-        .create(document.querySelector('#isi_html'))
-        .catch(error => {
-            console.error(error);
-        });
-
-    // Auto-generate slug from title
-    document.getElementById('judul').addEventListener('input', function() {
-        if (!document.getElementById('slug').value) {
-            document.getElementById('slug').value = this.value
-                .toLowerCase()
-                .replace(/[^a-z0-9]+/g, '-')
-                .replace(/(^-|-$)/g, '');
-        }
-    });
-</script>
-@endpush
 @endsection

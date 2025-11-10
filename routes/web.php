@@ -37,5 +37,4 @@ Route::resource('user', UserController::class);
 Route::resource('berita', BeritaController::class);
 
 // Additional routes untuk manajemen status berita
-Route::patch('/berita/{berita}/publish', [BeritaController::class, 'publish'])->name('berita.publish');
-Route::patch('/berita/{berita}/draft', [BeritaController::class, 'draft'])->name('berita.draft');
+Route::resource('berita', BeritaController::class);
