@@ -3,15 +3,28 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
-use Illuminate\Http\Request;
+use Illuminate\Http\Request; // <-- Pastikan ini ada
 use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
-    // Menampilkan daftar user
-    public function index()
+    /**
+     * Menampilkan daftar user
+     */
+    // V 1. Ubah method index()
+    public function index(Request $request) // Tambahkan Request $request
     {
-        $items = User::orderBy('id', 'desc')->paginate(15);
+        // Tentukan kolom
+        $filterableColumns = []; // Tidak ada filter dropdown untuk User saat ini
+        $searchableColumns = ['name', 'email']; // Kolom yang ingin dicari
+
+        // Terapkan scope, paginate, dan withQueryString
+        $items = User::filter($request, $filterableColumns)
+                     ->search($request, $searchableColumns)
+                     ->orderBy('id', 'desc')
+                     ->paginate(15)
+                     ->withQueryString(); // <-- PENTING
+
         return view('pages.user.index', compact('items'));
     }
 

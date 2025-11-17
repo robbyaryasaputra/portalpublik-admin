@@ -34,7 +34,7 @@ class BeritaSeeder extends Seeder
         }
 
         // 3. Buat 50 Berita Acak
-        foreach (range(1, 50) as $index) {
+        foreach (range(1, 100) as $index) {
             // Buat judul acak
             $judul = $faker->sentence(6); // 6 kata acak
 

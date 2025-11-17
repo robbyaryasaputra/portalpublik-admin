@@ -9,11 +9,42 @@
             <div class="card mb-4">
                 <div class="card-header d-flex justify-content-between align-items-center">
                     <h6 class="mb-0">Daftar Kategori Berita</h6>
-
                     <a href="{{ route('kategori-berita.create') }}" class="btn btn-sm btn-primary">
                         <i class="material-icons opacity-10 me-1">add</i> Tambah Kategori
                     </a>
-                    </div>
+                </div>
+
+                <!-- V FORM SEARCH (RAFIX) -->
+                <div class="card-body border-bottom py-3">
+                    <form action="{{ route('kategori-berita.index') }}" method="GET">
+                        <!-- 1. Hapus 'align-items' dari row -->
+                        <div class="row g-3">
+                            <!-- Search -->
+                            <div class="col-md-9">
+                                <!-- 2. Tambahkan 'mb-0' -->
+                                <div class="input-group input-group-outline mb-0">
+                                    <label class="form-label">Cari Nama/Deskripsi...</label>
+                                    <input type="text" class="form-control" id="search" name="search"
+                                        value="{{ request('search') }}">
+                                </div>
+                            </div>
+
+                            <!-- Tombol -->
+                            <!-- 3. Tambahkan 'd-flex align-items-end' -->
+                            <div class="col-md-3 d-flex align-items-end">
+                                <button type="submit" class="btn btn-primary me-2">
+                                    <i class="material-icons opacity-10">search</i> Cari
+                                </button>
+                                <a href="{{ route('kategori-berita.index') }}" class="btn btn-secondary">
+                                    Reset
+                                </a>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <!-- ^ BATAS AKHIR FORM -->
+
+
                 <div class="card-body">
                     @if(session('success'))
                         <div class="alert alert-success">{{ session('success') }}</div>
@@ -31,14 +62,15 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @forelse($items as $item)
+                                @forelse($items as $index => $item)
                                     <tr>
-                                        <td class="text-center">{{ $item->kategori_id }}</td>
+                                        <td class="text-center">
+                                            {{ ($items->currentPage() - 1) * $items->perPage() + $index + 1 }}
+                                        </td>
                                         <td>{{ $item->nama }}</td>
                                         <td>{{ $item->slug }}</td>
                                         <td>{{ \Illuminate\Support\Str::limit($item->deskripsi, 80) }}</td>
                                         <td class="text-center">
-                                            {{-- Tombol Lihat dihapus --}}
                                             <a href="{{ route('kategori-berita.edit', ['kategori_beritum' => $item->kategori_id]) }}" class="btn btn-sm btn-warning">
                                                 <i class="material-icons opacity-10">edit</i> Edit
                                             </a>
@@ -61,7 +93,7 @@
                     </div>
 
                     <div class="mt-3">
-                        {{ $items->links() }}
+                        {{ $items->links('pagination::bootstrap-5') }}
                     </div>
                 </div>
             </div>

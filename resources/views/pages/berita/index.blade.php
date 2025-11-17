@@ -9,11 +9,74 @@
             <div class="card mb-4">
                 <div class="card-header d-flex justify-content-between align-items-center">
                     <h6 class="mb-0">Daftar Berita</h6>
-
                     <a href="{{ route('berita.create') }}" class="btn btn-sm btn-primary">
                         <i class="material-icons opacity-10 me-1">add</i> Tulis Berita Baru
                     </a>
-                    </div>
+                </div>
+
+                <!-- V FORM FILTER & SEARCH (RAFIX) -->
+                <div class="card-body border-bottom py-3">
+                    <form action="{{ route('berita.index') }}" method="GET">
+                        <!-- 1. Hapus 'align-items' dari row -->
+                        <div class="row g-3">
+                            <!-- Search -->
+                            <div class="col-md-4">
+                                <!-- 2. Tambahkan 'mb-0' -->
+                                <div class="input-group input-group-outline mb-0">
+                                    <label class="form-label">Cari Judul/Penulis...</label>
+                                    <input type="text" class="form-control" id="search" name="search"
+                                        value="{{ request('search') }}">
+                                </div>
+                            </div>
+
+                            <!-- Filter Kategori -->
+                            <div class="col-md-3">
+                                <!-- 2. Tambahkan 'mb-0' -->
+                                <div class="input-group input-group-outline mb-0">
+                                    <select class="form-control" id="kategori_id" name="kategori_id">
+                                        <option value="">Semua Kategori</option>
+                                        @foreach ($kategori as $kat)
+                                            <option value="{{ $kat->kategori_id }}"
+                                                {{ request('kategori_id') == $kat->kategori_id ? 'selected' : '' }}>
+                                                {{ $kat->nama }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!-- Filter Status -->
+                            <div class="col-md-2">
+                                <!-- 2. Tambahkan 'mb-0' -->
+                                <div class="input-group input-group-outline mb-0">
+                                    <select class="form-control" id="status" name="status">
+                                        <option value="">Semua Status</option>
+                                        <option value="published" {{ request('status') == 'published' ? 'selected' : '' }}>
+                                            Published
+                                        </option>
+                                        <option value="draft" {{ request('status') == 'draft' ? 'selected' : '' }}>
+                                            Draft
+                                        </option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!-- Tombol -->
+                            <!-- 3. Tambahkan 'd-flex align-items-end' -->
+                            <div class="col-md-3 d-flex align-items-end">
+                                <button type="submit" class="btn btn-primary me-2">
+                                    <i class="material-icons opacity-10">search</i> Filter
+                                </button>
+                                <a href="{{ route('berita.index') }}" class="btn btn-secondary">
+                                    Reset
+                                </a>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <!-- ^ BATAS AKHIR BLOK FORM -->
+
+
                 <div class="card-body">
                     @if(session('success'))
                         <div class="alert alert-success">{{ session('success') }}</div>
@@ -33,9 +96,9 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @forelse($items as $item)
+                                @forelse($items as $index => $item)
                                     <tr>
-                                        <td class="text-center">{{ $item->berita_id }}</td>
+                                        <td class="text-center">{{ ($items->currentPage() - 1) * $items->perPage() + $index + 1 }}</td>
                                         <td>{{ \Illuminate\Support\Str::limit($item->judul, 60) }}</td>
                                         <td>{{ $item->kategoriBerita->nama ?? 'N/A' }}</td>
                                         <td>{{ $item->penulis ?? 'N/A' }}</td>
@@ -70,7 +133,7 @@
                     </div>
 
                     <div class="mt-3">
-                        {{ $items->links() }}
+                        {{ $items->links('pagination::bootstrap-5') }}
                     </div>
                 </div>
             </div>

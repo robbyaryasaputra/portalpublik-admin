@@ -7,20 +7,26 @@ use App\Models\KategoriBerita;
 
 class KategoriBeritaController extends Controller
 {
-    // Menampilkan daftar kategori berita
-    public function index()
+   public function index(Request $request)
     {
-        $items = KategoriBerita::orderBy('kategori_id', 'desc')->paginate(15);
+        $filterableColumns = [];
+        $searchableColumns = ['nama', 'deskripsi']; // Kolom yang ingin dicari
+
+        // V 3. Terapkan scope dan withQueryString()
+        $items = KategoriBerita::filter($request, $filterableColumns) // <-- Tambahkan ini
+                             ->search($request, $searchableColumns) // <-- Tambahkan ini
+                             ->orderBy('kategori_id', 'desc')
+                             ->paginate(15)
+                             ->withQueryString(); // <-- Tambahkan ini (PENTING)
+
         return view('pages.kategori-berita.index', compact('items'));
     }
-
     // Menampilkan form untuk membuat kategori baru
     public function create()
     {
         return view('pages.kategori-berita.create');
     }
 
-    // Menyimpan kategori baru ke database
     public function store(Request $request)
     {
         $data = $request->validate([
@@ -29,7 +35,6 @@ class KategoriBeritaController extends Controller
             'deskripsi' => 'nullable|string',
         ]);
 
-        // Jika slug kosong, buat dari nama
         if (empty($data['slug'])) {
             $data['slug'] = \Str::slug($data['nama']);
         }

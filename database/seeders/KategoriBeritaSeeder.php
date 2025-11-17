@@ -23,7 +23,7 @@ class KategoriBeritaSeeder extends Seeder
         $faker = Faker::create('id_ID');
 
         // Buat 10 Kategori Berita
-        foreach (range(1, 10) as $index) {
+        foreach (range(1, 100) as $index) {
             // Buat nama yang unik (misal: "Berita Olahraga", "Info Keuangan")
             // 'words(3, true)' = 3 kata, dikembalikan sebagai string
             $nama = 'Berita ' . $faker->unique()->words(2, true);

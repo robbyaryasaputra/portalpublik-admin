@@ -22,5 +22,11 @@ class DatabaseSeeder extends Seeder
         $this->call(BeritaSeeder::class);
 
         // panggil seeder lain di sini jika ada...
+        $this->call([
+            WargaSeeder::class,
+            UserSeeder::class,
+            ProfilSeeder::class,
+            // Panggil seeder lain jika ada...
+        ]);
     }
 }

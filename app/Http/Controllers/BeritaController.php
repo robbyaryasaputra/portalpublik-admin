@@ -2,24 +2,36 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use Illuminate\Http\Request; // <-- Pastikan ini ada
 use App\Models\Berita;
-use App\Models\KategoriBerita; // <-- Penting: Ambil model Kategori
-use Illuminate\Support\Str; // <-- Penting: Untuk membuat slug
+use App\Models\KategoriBerita;
+use Illuminate\Support\Str;
 
 class BeritaController extends Controller
 {
     /**
      * Menampilkan daftar berita
      */
-    public function index()
+    // V 1. Tambahkan (Request $request)
+    public function index(Request $request)
     {
-        // Gunakan 'with' untuk eager loading relasi kategoriBerita
-        $items = Berita::with('kategoriBerita')
-                       ->orderBy('berita_id', 'desc')
-                       ->paginate(15);
+        // V 2. Tentukan kolom untuk filter dan search
+        $filterableColumns = ['kategori_id', 'status'];
+        $searchableColumns = ['judul', 'penulis']; // Anda bisa tambahkan 'isi_html' jika mau
 
-        return view('pages.berita.index', compact('items'));
+        // V 3. Ambil data untuk dropdown filter
+        $kategori = KategoriBerita::orderBy('nama', 'asc')->get();
+
+        // V 4. Terapkan scope dan withQueryString()
+        $items = Berita::with('kategoriBerita')
+                       ->filter($request, $filterableColumns)    // <-- Tambahkan ini
+                       ->search($request, $searchableColumns)   // <-- Tambahkan ini
+                       ->orderBy('berita_id', 'desc')
+                       ->paginate(15)
+                       ->withQueryString(); // <-- Tambahkan ini (PENTING untuk pagination)
+
+        // V 5. Kirim data 'kategori' ke view
+        return view('pages.berita.index', compact('items', 'kategori'));
     }
 
     /**
@@ -27,9 +39,9 @@ class BeritaController extends Controller
      */
     public function create()
     {
-        // V Ambil semua kategori untuk ditampilkan di dropdown
+        // ... (Tidak ada perubahan)
         $kategori = KategoriBerita::orderBy('nama', 'asc')->get();
-        return view('pages.berita.create', compact('kategori')); // <-- Data dikirim ke view
+        return view('pages.berita.create', compact('kategori'));
     }
 
     /**
@@ -37,17 +49,17 @@ class BeritaController extends Controller
      */
     public function store(Request $request)
     {
+        // ... (Tidak ada perubahan)
         $data = $request->validate([
             'judul' => 'required|string|max:255',
             'slug' => 'nullable|string|max:255|unique:beritas,slug',
             'kategori_id' => 'required|integer|exists:kategori_beritas,kategori_id',
             'isi_html' => 'nullable|string',
             'penulis' => 'nullable|string|max:100',
-            'status' => 'required|string|in:draft,published', // Sesuaikan status
+            'status' => 'required|string|in:draft,published',
             'terbit_at' => 'nullable|date',
         ]);
 
-        // Jika slug kosong, buat dari judul
         if (empty($data['slug'])) {
             $data['slug'] = Str::slug($data['judul']);
         }
@@ -57,30 +69,17 @@ class BeritaController extends Controller
         return redirect()->route('berita.index')->with('success', 'Berita berhasil ditambahkan');
     }
 
-    /**
-     * (Opsional) Menampilkan satu berita
-     */
-    public function show(Berita $beritum)
-    {
-        // return view('pages.berita.show', ['item' => $beritum]);
-    }
-
-    /**
-     * Menampilkan form edit
-     */
+    // ... (Method show, edit, update, destroy tidak perlu diubah)
+    // ...
     public function edit(Berita $beritum)
     {
-        // V Ambil semua kategori untuk ditampilkan di dropdown
         $kategori = KategoriBerita::orderBy('nama', 'asc')->get();
         return view('pages.berita.edit', [
             'item' => $beritum,
-            'kategori' => $kategori // <-- Data dikirim ke view
+            'kategori' => $kategori
         ]);
     }
 
-    /**
-     * Memperbarui berita
-     */
     public function update(Request $request, Berita $beritum)
     {
         $data = $request->validate([
@@ -102,9 +101,6 @@ class BeritaController extends Controller
         return redirect()->route('berita.index')->with('success', 'Berita berhasil diperbarui');
     }
 
-    /**
-     * Menghapus berita
-     */
     public function destroy(Berita $beritum)
     {
         $beritum->delete();

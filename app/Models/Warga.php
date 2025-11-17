@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+// V 1. Tambahkan 'Builder' untuk Scoping
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -9,22 +11,61 @@ class Warga extends Model
 {
     use HasFactory;
 
-    // Nama tabel (laravel default: wargas), set explicit jika ingin
     protected $table = 'wargas';
-
-    // Primary key sesuai migration
     protected $primaryKey = 'warga_id';
     public $incrementing = true;
     protected $keyType = 'int';
 
-    // Fillable properties untuk mass assignment (exclude primary key dan kolom yang tidak ada di migration)
     protected $fillable = [
         'no_ktp',
         'nama',
-        'jenis_kelamin',
+        'jenis_kelamin', // <-- Ini akan kita jadikan filter
         'agama',
         'pekerjaan',
         'telp',
         'email',
     ];
+
+    // V 2. TAMBAHKAN DUA FUNGSI (SCOPE) DI BAWAH INI
+
+    /**
+     * Scope: Filter berdasarkan kolom yang dapat difilter
+     */
+    public function scopeFilter(Builder $query, $request, array $filterableColumns = []): Builder
+    {
+        if (!$request) {
+            return $query;
+        }
+
+        foreach ($filterableColumns as $column) {
+            // Gunakan $request->filled() untuk memastikan nilai tidak kosong
+            if ($request->filled($column)) {
+                $value = $request->input($column);
+                $query->where($column, $value);
+            }
+        }
+        return $query;
+    }
+
+    /**
+     * Scope: Search berdasarkan kolom yang dapat dicari
+     */
+    public function scopeSearch(Builder $query, $request, array $searchableColumns = []): Builder
+    {
+        if (!$request || !$request->filled('search')) {
+            return $query;
+        }
+
+        $searchTerm = $request->input('search');
+
+        return $query->where(function (Builder $q) use ($searchTerm, $searchableColumns) {
+            foreach ($searchableColumns as $index => $column) {
+                if ($index === 0) {
+                    $q->where($column, 'like', '%' . $searchTerm . '%');
+                } else {
+                    $q->orWhere($column, 'like', '%' . $searchTerm . '%');
+                }
+            }
+        });
+    }
 }
