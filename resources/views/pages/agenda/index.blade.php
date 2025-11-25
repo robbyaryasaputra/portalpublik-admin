@@ -46,7 +46,7 @@
                         <button type="submit" class="btn btn-primary me-2">
                             <i class="material-icons opacity-10">search</i> Filter
                         </button>
-                        @if(request('search'))
+                        @if(request('search') || request('filter_penyelenggara'))
                             <a href="{{ route('agenda.index') }}" class="btn btn-secondary">
                                 Reset
                             </a>

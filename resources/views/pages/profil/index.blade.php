@@ -39,7 +39,7 @@
                         <button type="submit" class="btn btn-primary me-2">
                             <i class="material-icons opacity-10">search</i> Filter
                         </button>
-                        @if(request('search'))
+                        @if(request('search')|| request('provinsi'))
                             <a href="{{ route('profil.index') }}" class="btn btn-secondary">
                                 Reset
                             </a>

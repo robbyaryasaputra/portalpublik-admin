@@ -50,7 +50,7 @@
                         <button type="submit" class="btn btn-primary me-2">
                             <i class="material-icons opacity-10">search</i> Filter
                         </button>
-                        @if(request('search'))
+                        @if(request('search')|| request('jenis_kelamin'))
                             <a href="{{ route('warga.index') }}" class="btn btn-secondary">
                                 Reset
                             </a>
