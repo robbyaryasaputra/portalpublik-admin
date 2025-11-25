@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-// V 1. Tambahkan 'Builder' untuk Scoping
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -29,45 +28,44 @@ class Profil extends Model
         'misi',
     ];
 
-    // ... (Relasi media biarkan apa adanya) ...
+    /**
+     * Relasi ke Tabel Media
+     */
     public function media()
     {
         return $this->hasMany(Media::class, 'ref_id', 'profil_id')->where('ref_table', 'profils');
     }
 
+    /**
+     * Ambil SATU foto untuk Logo
+     */
     public function getLogoAttribute()
     {
-        $m = $this->media()->orderBy('sort_order')->first();
+        // Cari yang spesifik caption 'logo'
+        $m = $this->media()->where('caption', 'logo')->first();
+        
+        // Fallback: Jika tidak ada caption logo, ambil file pertama
+        if (!$m) {
+            $m = $this->media()->orderBy('sort_order')->first();
+        }
         return $m ? $m->file_url : null;
     }
 
-    // V 2. TAMBAHKAN DUA FUNGSI (SCOPE) DI BAWAH INI
-
-    /**
-     * Scope: Filter berdasarkan kolom yang dapat difilter
-     */
+    // --- Scope Filter & Search (Tetap Ada) ---
     public function scopeFilter(Builder $query, $request, array $filterableColumns = []): Builder
     {
-        if (!$request) {
-            return $query;
-        }
+        if (!$request) return $query;
         foreach ($filterableColumns as $column) {
             if ($request->filled($column)) {
-                $value = $request->input($column);
-                $query->where($column, $value);
+                $query->where($column, $request->input($column));
             }
         }
         return $query;
     }
 
-    /**
-     * Scope: Search berdasarkan kolom yang dapat dicari
-     */
     public function scopeSearch(Builder $query, $request, array $searchableColumns = []): Builder
     {
-        if (!$request || !$request->filled('search')) {
-            return $query;
-        }
+        if (!$request || !$request->filled('search')) return $query;
         $searchTerm = $request->input('search');
         return $query->where(function (Builder $q) use ($searchTerm, $searchableColumns) {
             foreach ($searchableColumns as $index => $column) {

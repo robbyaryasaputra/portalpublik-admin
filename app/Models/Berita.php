@@ -2,10 +2,10 @@
 
 namespace App\Models;
 
-// V Tambahkan 'use' untuk Builder
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Media;
 
 class Berita extends Model
 {
@@ -17,63 +17,53 @@ class Berita extends Model
     protected $keyType = 'int';
 
     protected $fillable = [
-        'kategori_id',
-        'judul',
-        'slug',
-        'isi_html',
-        'penulis',
-        'status',
-        'terbit_at',
+        'kategori_id', 'judul', 'slug', 'isi_html', 'penulis', 'status', 'terbit_at',
     ];
 
-    /**
-     * Mendapatkan kategori berita untuk berita ini.
-     */
+    // Relasi ke Media
+    public function media()
+    {
+        return $this->hasMany(Media::class, 'ref_id', 'berita_id')->where('ref_table', 'beritas');
+    }
+
+    // Accessor: Ambil 1 Cover Image
+    public function getCoverAttribute()
+    {
+        $m = $this->media()->where('caption', 'cover_image')->first();
+        if (!$m) $m = $this->media()->orderBy('sort_order')->first();
+        return $m ? $m->file_url : null;
+    }
+
+    // BARU: Accessor Ambil Galeri (Banyak Foto)
+    public function getGalleryAttribute()
+    {
+        // Ambil media yang caption-nya 'gallery'
+        return $this->media()->where('caption', 'gallery')->orderBy('sort_order')->get();
+    }
+
     public function kategoriBerita()
     {
         return $this->belongsTo(KategoriBerita::class, 'kategori_id', 'kategori_id');
     }
 
-    // V TAMBAHKAN DUA FUNGSI (SCOPE) DI BAWAH INI
-    // (Anda bisa salin-tempel dari model Pelanggan.php Anda)
-
-    /**
-     * Scope: Filter berdasarkan kolom yang dapat difilter
-     */
+    // Scope Filter & Search (Tetap)
     public function scopeFilter(Builder $query, $request, array $filterableColumns = []): Builder
     {
-        if (!$request) {
-            return $query;
-        }
-
+        if (!$request) return $query;
         foreach ($filterableColumns as $column) {
-            // Gunakan $request->filled() untuk memastikan nilai tidak kosong (contoh: '' string kosong)
-            if ($request->filled($column)) {
-                $value = $request->input($column);
-                $query->where($column, $value);
-            }
+            if ($request->filled($column)) $query->where($column, $request->input($column));
         }
         return $query;
     }
 
-    /**
-     * Scope: Search berdasarkan kolom yang dapat dicari
-     */
     public function scopeSearch(Builder $query, $request, array $searchableColumns = []): Builder
     {
-        if (!$request || !$request->filled('search')) {
-            return $query;
-        }
-
+        if (!$request || !$request->filled('search')) return $query;
         $searchTerm = $request->input('search');
-
         return $query->where(function (Builder $q) use ($searchTerm, $searchableColumns) {
             foreach ($searchableColumns as $index => $column) {
-                if ($index === 0) {
-                    $q->where($column, 'like', '%' . $searchTerm . '%');
-                } else {
-                    $q->orWhere($column, 'like', '%' . $searchTerm . '%');
-                }
+                if ($index === 0) $q->where($column, 'like', '%' . $searchTerm . '%');
+                else $q->orWhere($column, 'like', '%' . $searchTerm . '%');
             }
         });
     }

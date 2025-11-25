@@ -36,9 +36,11 @@
                         <button type="submit" class="btn btn-primary me-2">
                             <i class="material-icons opacity-10">search</i> Cari
                         </button>
-                        <a href="{{ route('user.index') }}" class="btn btn-secondary">
-                            Reset
-                        </a>
+                        @if(request('search'))
+                            <a href="{{ route('user.index') }}" class="btn btn-secondary">
+                                Reset
+                            </a>
+                        @endif
                     </div>
                 </div>
             </form>

@@ -13,23 +13,17 @@
           </a>
         </div>
 
-        <!-- V FORM FILTER & SEARCH (RAFIX) -->
         <div class="card-body border-bottom py-3">
             <form action="{{ route('profil.index') }}" method="GET">
-                <!-- 1. Hapus 'align-items' dari row -->
                 <div class="row g-3">
-                    <!-- Search -->
                     <div class="col-md-6">
-                        <!-- 2. Tambahkan 'mb-0' -->
                         <div class="input-group input-group-outline mb-0">
                             <label class="form-label">Cari Nama Desa/Kecamatan/Email...</label>
                             <input type="text" class="form-control" id="search" name="search"
                                 value="{{ request('search') }}">
                         </div>
                     </div>
-                    <!-- Filter Provinsi -->
                     <div class="col-md-3">
-                        <!-- 2. Tambahkan 'mb-0' -->
                         <div class="input-group input-group-outline mb-0">
                             <select class="form-control" id="provinsi" name="provinsi">
                                 <option value="">Semua Provinsi</option>
@@ -41,31 +35,31 @@
                             </select>
                         </div>
                     </div>
-                    <!-- Tombol -->
-                    <!-- 3. Tambahkan 'd-flex align-items-end' -->
                     <div class="col-md-3 d-flex align-items-end">
                         <button type="submit" class="btn btn-primary me-2">
                             <i class="material-icons opacity-10">search</i> Filter
                         </button>
-                        <a href="{{ route('profil.index') }}" class="btn btn-secondary">
-                            Reset
-                        </a>
+                        @if(request('search'))
+                            <a href="{{ route('profil.index') }}" class="btn btn-secondary">
+                                Reset
+                            </a>
+                        @endif
                     </div>
                 </div>
             </form>
         </div>
-        <!-- ^ BATAS AKHIR FORM -->
 
         <div class="card-body">
           @if(session('success'))
-            <div class="alert alert-success">{{ session('success') }}</div>
+            <div class="alert alert-success text-white">{{ session('success') }}</div>
           @endif
 
           <div class="table-responsive">
             <table class="table align-items-center mb-0">
               <thead>
                 <tr>
-                  <th class="text-center">#</th>
+                  <th class="text-center">NO</th>
+                  <th class="text-center">Logo</th>
                   <th>Nama Desa</th>
                   <th>Kecamatan</th>
                   <th>Kabupaten</th>
@@ -81,6 +75,45 @@
                   <td class="text-center">
                     {{ ($profils->currentPage() - 1) * $profils->perPage() + $index + 1 }}
                   </td>
+
+                  <td class="text-center">
+                    @if($profil->logo)
+                        {{-- Jika Ada Logo --}}
+                        <img src="{{ asset('storage/' . $profil->logo) }}" 
+                             alt="logo"
+                             class="rounded-circle border"
+                             style="width: 50px; height: 50px; object-fit: cover;">
+                    @else
+                        {{-- Jika TIDAK Ada Logo (Gunakan Inisial Warna-Warni) --}}
+                        @php
+                            // 1. Buat Inisial
+                            $words = explode(' ', $profil->nama_desa);
+                            $initials = '';
+                            foreach($words as $key => $word) {
+                                if($key < 2) $initials .= strtoupper(substr($word, 0, 1));
+                            }
+
+                            // 2. Pilih Warna Acak Berdasarkan ID (Agar konsisten)
+                            $colors = [
+                                'bg-gradient-primary', 
+                                'bg-gradient-success', 
+                                'bg-gradient-info', 
+                                'bg-gradient-danger', 
+                                'bg-gradient-warning', 
+                                'bg-gradient-dark'
+                            ];
+                            // Rumus: ID modulus Jumlah Warna
+                            $randomColor = $colors[$profil->profil_id % count($colors)];
+                        @endphp
+                        
+                        {{-- Tampilkan Lingkaran dengan Warna Acak --}}
+                        <div class="rounded-circle {{ $randomColor }} d-flex justify-content-center align-items-center mx-auto text-white fw-bold shadow-sm" 
+                             style="width: 50px; height: 50px; font-size: 18px; text-shadow: 1px 1px 2px rgba(0,0,0,0.3);">
+                            {{ $initials }}
+                        </div>
+                    @endif
+                  </td>
+
                   <td>{{ $profil->nama_desa }}</td>
                   <td>{{ $profil->kecamatan }}</td>
                   <td>{{ $profil->kabupaten }}</td>
@@ -102,7 +135,7 @@
                 </tr>
                 @empty
                 <tr>
-                  <td colspan="8" class="text-center">Data profil tidak ditemukan.</td>
+                  <td colspan="9" class="text-center">Data profil tidak ditemukan.</td>
                 </tr>
                 @endforelse
               </tbody>

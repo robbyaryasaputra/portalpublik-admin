@@ -2,12 +2,14 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
-use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\WargaController;
-use App\Http\Controllers\ProfilController;
-use App\Http\Controllers\KategoriBeritaController;
-use App\Http\Controllers\BeritaController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\WargaController;
+use App\Http\Controllers\AgendaController;
+use App\Http\Controllers\BeritaController;
+use App\Http\Controllers\GaleriController;
+use App\Http\Controllers\ProfilController;
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\KategoriBeritaController;
 
 Route::get('/', function () {
 
@@ -36,5 +38,6 @@ Route::resource('user', UserController::class);
 // Resource routes untuk CRUD Berita
 Route::resource('berita', BeritaController::class);
 
-// Additional routes untuk manajemen status berita
-Route::resource('berita', BeritaController::class);
+Route::resource('agenda', AgendaController::class);
+
+Route::resource('galeri', GaleriController::class);

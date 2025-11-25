@@ -36,6 +36,16 @@
       </li>
 
       <li class="nav-item">
+        <a class="nav-link text-white {{ request()->routeIs('agenda.*') ? 'active bg-gradient-primary' : '' }}" href="{{ route('agenda.index') }}">
+        <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+      {{-- Icon Kalender --}}
+      <i class="material-icons opacity-10">event</i>
+      </div>
+      <span class="nav-link-text ms-1">Agenda</span>
+      </a>
+      </li>
+
+      <li class="nav-item">
         <a class="nav-link text-white {{ request()->routeIs('kategori-berita.*') ? 'active bg-gradient-primary' : '' }}" href="{{ route('kategori-berita.index') }}">
           <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
             <i class="material-icons opacity-10">category</i>
@@ -74,6 +84,16 @@
           <span class="nav-link-text ms-1">Warga</span>
         </a>
       </li>
+
+      <li class="nav-item">
+        <a class="nav-link text-white {{ request()->routeIs('galeri.*') ? 'active bg-gradient-primary' : '' }}" href="{{ route('galeri.index') }}">
+        <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+        {{-- Icon Tumpukan Foto --}}
+        <i class="material-icons opacity-10">collections</i>
+      </div>
+      <span class="nav-link-text ms-1">Galeri</span>
+      </a>
+    </li>
 
       </ul>
   </div>
