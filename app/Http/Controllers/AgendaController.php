@@ -2,30 +2,24 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Media;
 use App\Models\Agenda;
+use App\Models\Media;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
-use App\Http\Controllers\AgendaController;
 
 class AgendaController extends Controller
 {
-    /**
-     * Menampilkan daftar agenda dengan fitur Search & Filter
-     */
     public function index(Request $request)
     {
-        // 1. Siapkan data untuk Dropdown Filter (Ambil nama penyelenggara yang unik)
+        // Ambil list penyelenggara unik untuk filter
         $penyelenggaraList = Agenda::whereNotNull('penyelenggara')
-                                   ->where('penyelenggara', '!=', '')
                                    ->distinct()
                                    ->orderBy('penyelenggara', 'asc')
                                    ->pluck('penyelenggara');
 
-        // 2. Mulai Query Builder
         $query = Agenda::query();
 
-        // 3. Logika Search (Judul atau Lokasi)
+        // Search Judul / Lokasi
         if ($request->filled('search')) {
             $search = $request->input('search');
             $query->where(function($q) use ($search) {
@@ -34,15 +28,13 @@ class AgendaController extends Controller
             });
         }
 
-        // 4. Logika Filter Dropdown (Penyelenggara)
+        // Filter Penyelenggara
         if ($request->filled('filter_penyelenggara')) {
             $query->where('penyelenggara', $request->input('filter_penyelenggara'));
         }
 
-        // 5. Eksekusi Query dengan Pagination
-        // withQueryString() penting agar saat pindah halaman (page 2), filter tidak hilang
         $agendas = $query->orderBy('tanggal_mulai', 'desc')
-                         ->paginate(10)
+                         ->paginate(20)
                          ->withQueryString();
 
         return view('pages.agenda.index', compact('agendas', 'penyelenggaraList'));
@@ -55,20 +47,22 @@ class AgendaController extends Controller
 
     public function store(Request $request)
     {
-        $request->validate([
-            'judul'           => 'required|string|max:255',
-            'tanggal_mulai'   => 'required|date',
-            'tanggal_selesai' => 'nullable|date|after_or_equal:tanggal_mulai',
-            'lokasi'          => 'nullable|string|max:255',
-            'penyelenggara'   => 'nullable|string|max:100',
-            'poster'          => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+        $data = $request->validate([
+            'judul'             => 'required|string|max:255',
+            'tanggal_mulai'     => 'required|date',
+            'tanggal_selesai'   => 'nullable|date|after_or_equal:tanggal_mulai',
+            'lokasi'            => 'nullable|string|max:255',
+            'penyelenggara'     => 'nullable|string|max:255',
+            'deskripsi'         => 'nullable|string',
+            'poster'            => 'nullable|image|max:2048',
         ]);
 
-        $agenda = Agenda::create($request->except(['poster']));
+        // Simpan Data Teks
+        $agenda = Agenda::create(collect($data)->except(['poster'])->toArray());
 
+        // Simpan Poster
         if ($request->hasFile('poster')) {
             $path = $request->file('poster')->store('uploads/agendas', 'public');
-            
             Media::create([
                 'ref_table' => 'agendas',
                 'ref_id'    => $agenda->agenda_id,
@@ -81,37 +75,46 @@ class AgendaController extends Controller
         return redirect()->route('agenda.index')->with('success', 'Agenda berhasil ditambahkan.');
     }
 
-    public function edit(Agenda $agenda)
+    // --- METHOD SHOW (BARU) ---
+    public function show($id)
     {
+        $agenda = Agenda::with('media')->findOrFail($id);
+        return view('pages.agenda.show', compact('agenda'));
+    }
+
+    public function edit($id)
+    {
+        $agenda = Agenda::with('media')->findOrFail($id);
         return view('pages.agenda.edit', compact('agenda'));
     }
 
-    public function update(Request $request, Agenda $agenda)
+    public function update(Request $request, $id)
     {
-        $request->validate([
-            'judul'           => 'required|string|max:255',
-            'tanggal_mulai'   => 'required|date',
-            'tanggal_selesai' => 'nullable|date|after_or_equal:tanggal_mulai',
-            'poster'          => 'nullable|image|max:2048',
+        $agenda = Agenda::findOrFail($id);
+
+        $data = $request->validate([
+            'judul'             => 'required|string|max:255',
+            'tanggal_mulai'     => 'required|date',
+            'tanggal_selesai'   => 'nullable|date|after_or_equal:tanggal_mulai',
+            'lokasi'            => 'nullable|string|max:255',
+            'penyelenggara'     => 'nullable|string|max:255',
+            'deskripsi'         => 'nullable|string',
+            'poster'            => 'nullable|image|max:2048',
         ]);
 
-        $agenda->update($request->except(['poster']));
+        $agenda->update(collect($data)->except(['poster'])->toArray());
 
         if ($request->hasFile('poster')) {
-            // Hapus poster lama
-            $oldMedia = Media::where('ref_table', 'agendas')
-                             ->where('ref_id', $agenda->agenda_id)
-                             ->where('caption', 'poster')
-                             ->first();
-
+            // Hapus Poster Lama
+            $oldMedia = $agenda->media()->where('caption', 'poster')->first();
             if ($oldMedia) {
-                if ($oldMedia->file_url && Storage::disk('public')->exists($oldMedia->file_url)) {
+                if (Storage::disk('public')->exists($oldMedia->file_url)) {
                     Storage::disk('public')->delete($oldMedia->file_url);
                 }
                 $oldMedia->delete();
             }
 
-            // Upload poster baru
+            // Upload Baru
             $path = $request->file('poster')->store('uploads/agendas', 'public');
             Media::create([
                 'ref_table' => 'agendas',
@@ -125,8 +128,10 @@ class AgendaController extends Controller
         return redirect()->route('agenda.index')->with('success', 'Agenda berhasil diperbarui.');
     }
 
-    public function destroy(Agenda $agenda)
+    public function destroy($id)
     {
+        $agenda = Agenda::with('media')->findOrFail($id);
+        
         foreach ($agenda->media as $m) {
             if ($m->file_url && Storage::disk('public')->exists($m->file_url)) {
                 Storage::disk('public')->delete($m->file_url);

@@ -12,14 +12,19 @@
                 <div class="card-body">
                     @if($errors->any())
                         <div class="alert alert-danger">
-                            <ul class="mb-0">@foreach($errors->all() as $error)<li>{{ $error }}</li>@endforeach</ul>
+                            <ul class="mb-0">
+                                @foreach($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
                         </div>
                     @endif
 
                     <form action="{{ route('berita.store') }}" method="POST" enctype="multipart/form-data">
                         @csrf
                         <div class="form-panel">
-                            
+
+                            {{-- SETUP VARIABLES --}}
                             @php
                                 $judul = old('judul');
                                 $slug = old('slug');
@@ -30,6 +35,7 @@
                                 $isi_html = old('isi_html');
                             @endphp
 
+                            {{-- BARIS 1: JUDUL & KATEGORI --}}
                             <div class="row">
                                 <div class="col-md-8">
                                     <div class="form-group mb-3">
@@ -47,7 +53,9 @@
                                         <select id="kategori_id" name="kategori_id" class="form-control" required>
                                             <option value="">-- Pilih Kategori --</option>
                                             @foreach($kategori as $kat)
-                                                <option value="{{ $kat->kategori_id }}" {{ $kategori_id == $kat->kategori_id ? 'selected' : '' }}>{{ $kat->nama }}</option>
+                                                <option value="{{ $kat->kategori_id }}" {{ $kategori_id == $kat->kategori_id ? 'selected' : '' }}>
+                                                    {{ $kat->nama }}
+                                                </option>
                                             @endforeach
                                         </select>
                                     </div>
@@ -61,6 +69,7 @@
                                 </div>
                             </div>
 
+                            {{-- BARIS 2: PENULIS & TANGGAL --}}
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="form-group mb-3">
@@ -76,26 +85,26 @@
                                 </div>
                             </div>
                             
-                            {{-- FOTO COVER (SINGLE) --}}
+                            {{-- BARIS 3: FOTO (COVER & GALERI) --}}
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="form-group mb-3">
-                                        <label class="fw-bold">Foto Sampul / Cover (Utama)</label>
+                                        <label class="fw-bold">Cover Berita (Utama)</label>
                                         <input type="file" name="cover_image" class="form-control">
-                                        <small class="text-muted">Hanya 1 foto untuk sampul berita.</small>
+                                        <small class="text-muted">Gambar utama yang muncul di daftar berita.</small>
                                     </div>
                                 </div>
                                 
-                                {{-- FOTO GALERI (MULTIPLE) - BARU --}}
                                 <div class="col-md-6">
                                     <div class="form-group mb-3">
                                         <label class="fw-bold">Galeri Dokumentasi (Bisa Banyak)</label>
                                         <input type="file" name="gallery[]" class="form-control" multiple>
-                                        <small class="text-muted">Tekan <b>Ctrl</b> untuk memilih banyak foto sekaligus.</small>
+                                        <small class="text-muted">Tekan <b>Ctrl</b> (Windows) / <b>Cmd</b> (Mac) untuk memilih banyak foto.</small>
                                     </div>
                                 </div>
                             </div>
 
+                            {{-- BARIS 4: ISI BERITA --}}
                             <div class="row mt-3">
                                 <div class="col-md-12">
                                     <div class="form-group">
@@ -109,7 +118,9 @@
                                 <button type="submit" class="btn btn-primary btn-action">
                                     <i class="material-icons opacity-10 me-1">save</i> Simpan
                                 </button>
-                                <a href="{{ route('berita.index') }}" class="btn btn-secondary">Batal</a>
+                                <a href="{{ route('berita.index') }}" class="btn btn-secondary">
+                                    <i class="material-icons opacity-10 me-1">undo</i> Batal
+                                </a>
                             </div>
                         </div>
                     </form>

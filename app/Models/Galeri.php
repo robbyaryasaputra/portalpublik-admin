@@ -4,24 +4,23 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Models\Media;
+use App\Models\Media; // Pastikan Model Media sudah ada
 
 class Galeri extends Model
 {
     use HasFactory;
 
     protected $table = 'galeris';
-    protected $primaryKey = 'galeri_id'; // Sesuai migrasi Anda
-    public $incrementing = true;
-    protected $keyType = 'int';
-
+    protected $primaryKey = 'galeri_id'; // Kunci utama custom
+    
     protected $fillable = [
         'judul',
         'deskripsi',
     ];
 
     /**
-     * Relasi: Satu Galeri punya BANYAK Foto (di tabel Media)
+     * Relasi: Satu Album punya BANYAK Foto
+     * Mengambil data dari tabel 'media' dimana ref_table = 'galeris'
      */
     public function photos()
     {
@@ -31,11 +30,12 @@ class Galeri extends Model
     }
 
     /**
-     * Helper: Ambil foto pertama sebagai Sampul Album
+     * Accessor: Sampul Album
+     * Mengambil foto pertama untuk dijadikan thumbnail di tabel index
      */
     public function getSampulAttribute()
     {
-        $firstPhoto = $this->photos()->first();
-        return $firstPhoto ? $firstPhoto->file_url : null;
+        $first = $this->photos()->first();
+        return $first ? $first->file_url : null;
     }
 }

@@ -12,9 +12,7 @@ class Agenda extends Model
 
     protected $table = 'agendas';
     protected $primaryKey = 'agenda_id';
-    public $incrementing = true;
-    protected $keyType = 'int';
-
+    
     protected $fillable = [
         'judul',
         'lokasi',
@@ -29,11 +27,17 @@ class Agenda extends Model
         'tanggal_selesai' => 'datetime',
     ];
 
+    /**
+     * Relasi ke Tabel Media
+     */
     public function media()
     {
         return $this->hasMany(Media::class, 'ref_id', 'agenda_id')->where('ref_table', 'agendas');
     }
 
+    /**
+     * Accessor: Ambil Poster
+     */
     public function getPosterAttribute()
     {
         $m = $this->media()->where('caption', 'poster')->first();

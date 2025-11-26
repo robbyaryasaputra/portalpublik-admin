@@ -73,46 +73,45 @@
                 </div>
             </div>
 
+            {{-- BAGIAN FOTO (Sesuai Layout Anda) --}}
             <div class="row">
-                {{-- EDIT COVER --}}
+                {{-- Edit Cover --}}
                 <div class="col-md-6">
                     <div class="form-group mb-3">
-                        <label class="fw-bold">Foto Sampul / Cover</label>
+                        <label class="fw-bold">Cover Berita</label>
                         <input type="file" name="cover_image" class="form-control">
                         @if($item->cover)
                             <div class="mt-2">
-                                <small>Cover Saat Ini:</small><br>
+                                <small>Saat ini:</small><br>
                                 <img src="{{ asset('storage/' . $item->cover) }}" class="img-thumbnail" style="height: 100px;">
                             </div>
                         @endif
                     </div>
                 </div>
-
-                {{-- EDIT GALERI --}}
+                
+                {{-- Edit Galeri (Fitur Tambahan) --}}
                 <div class="col-md-6">
                     <div class="form-group mb-3">
-                        <label class="fw-bold">Tambah Galeri Dokumentasi</label>
+                        <label class="fw-bold">Tambah Galeri</label>
                         <input type="file" name="gallery[]" class="form-control" multiple>
-                        <small class="text-muted">Upload foto baru untuk menambahkan ke galeri.</small>
+                        <small class="text-muted">Upload foto baru untuk menambah galeri.</small>
                     </div>
+                    
+                    {{-- Preview Galeri Lama --}}
+                    @if($item->gallery->count() > 0)
+                        <div class="mt-2">
+                            <small class="fw-bold">Galeri Tersimpan:</small>
+                            <div class="d-flex flex-wrap gap-2 mt-1">
+                                @foreach($item->gallery as $gal)
+                                    <a href="{{ asset('storage/' . $gal->file_url) }}" target="_blank">
+                                        <img src="{{ asset('storage/' . $gal->file_url) }}" class="img-thumbnail" style="width: 60px; height: 60px; object-fit: cover;">
+                                    </a>
+                                @endforeach
+                            </div>
+                        </div>
+                    @endif
                 </div>
             </div>
-
-            {{-- PREVIEW GALERI --}}
-            @if($item->gallery->count() > 0)
-                <div class="mb-3 p-3 bg-light border rounded">
-                    <label class="fw-bold mb-2">Dokumentasi Tersimpan:</label>
-                    <div class="row g-2">
-                        @foreach($item->gallery as $img)
-                            <div class="col-4 col-md-2">
-                                <a href="{{ asset('storage/' . $img->file_url) }}" target="_blank">
-                                    <img src="{{ asset('storage/' . $img->file_url) }}" class="img-thumbnail w-100" style="height: 80px; object-fit: cover;">
-                                </a>
-                            </div>
-                        @endforeach
-                    </div>
-                </div>
-            @endif
 
             <div class="row mt-3">
                 <div class="col-md-12">
@@ -127,8 +126,11 @@
                     <button class="btn btn-primary btn-action">
                         <i class="material-icons opacity-10 me-1">save</i> Update
                     </button>
-                    <a href="{{ route('berita.index') }}" class="btn btn-secondary">Batal</a>
+                    <a href="{{ route('berita.index') }}" class="btn btn-secondary">
+                        <i class="material-icons opacity-10 me-1">undo</i> Batal
+                    </a>
             </div>
+            
             </div>
         </form>
     </div>

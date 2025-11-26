@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\Berita;
 use App\Models\KategoriBerita;
 use App\Models\Media;
+use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
 
@@ -15,13 +15,14 @@ class BeritaController extends Controller
     {
         $filterableColumns = ['kategori_id', 'status'];
         $searchableColumns = ['judul', 'penulis'];
+        
         $kategori = KategoriBerita::orderBy('nama', 'asc')->get();
 
-        $items = Berita::with('kategoriBerita')
+        $items = Berita::with(['kategoriBerita', 'media'])
                        ->filter($request, $filterableColumns)
                        ->search($request, $searchableColumns)
-                       ->orderBy('berita_id', 'desc')
-                       ->paginate(10)
+                       ->orderBy('created_at', 'desc')
+                       ->paginate(20)
                        ->withQueryString();
 
         return view('pages.berita.index', compact('items', 'kategori'));
@@ -37,27 +38,27 @@ class BeritaController extends Controller
     {
         $data = $request->validate([
             'judul'       => 'required|string|max:255',
-            'slug'        => 'nullable|string|max:255|unique:beritas,slug',
-            'kategori_id' => 'required|integer|exists:kategori_beritas,kategori_id',
-            'isi_html'    => 'nullable|string',
-            'penulis'     => 'nullable|string|max:100',
-            'status'      => 'required|string|in:draft,published',
+            'kategori_id' => 'required|integer',
+            'isi_html'    => 'required|string',
+            'penulis'     => 'required|string|max:100',
+            'status'      => 'required|in:draft,published',
             'terbit_at'   => 'nullable|date',
-            'cover_image' => 'nullable|image|max:2048', // Cover (Single)
-            'gallery.*'   => 'nullable|image|max:2048', // Galeri (Multiple)
+            'cover_image' => 'nullable|image|max:2048', // Validasi Cover
+            'gallery.*'   => 'nullable|image|max:2048', // Validasi Galeri
         ]);
 
-        if (empty($data['slug'])) {
-            $data['slug'] = Str::slug($data['judul']);
-        }
+        // Buat Slug otomatis
+        $data['slug'] = Str::slug($request->judul) . '-' . time();
+        
+        // Simpan Data Berita
+        $beritaData = collect($data)->except(['cover_image', 'gallery'])->toArray();
+        $berita = Berita::create($beritaData);
 
-        $berita = Berita::create($data);
-
-        // 1. UPLOAD COVER (Single)
+        // 1. Simpan COVER (Single)
         if ($request->hasFile('cover_image')) {
             $path = $request->file('cover_image')->store('uploads/beritas', 'public');
             Media::create([
-                'ref_table' => 'beritas',
+                'ref_table' => 'berita',
                 'ref_id'    => $berita->berita_id,
                 'file_url'  => $path,
                 'caption'   => 'cover_image',
@@ -65,79 +66,13 @@ class BeritaController extends Controller
             ]);
         }
 
-        // 2. UPLOAD GALERI (Multiple) - BARU
+        // 2. Simpan GALERI (Multiple)
         if ($request->hasFile('gallery')) {
             foreach ($request->file('gallery') as $file) {
                 $path = $file->store('uploads/beritas', 'public');
                 Media::create([
-                    'ref_table' => 'beritas',
+                    'ref_table' => 'berita',
                     'ref_id'    => $berita->berita_id,
-                    'file_url'  => $path,
-                    'caption'   => 'gallery', // Bedakan captionnya
-                    'mime_type' => $file->getClientMimeType(),
-                ]);
-            }
-        }
-
-        return redirect()->route('berita.index')->with('success', 'Berita berhasil ditambahkan');
-    }
-
-    public function edit(Berita $beritum)
-    {
-        $kategori = KategoriBerita::orderBy('nama', 'asc')->get();
-        return view('pages.berita.edit', [
-            'item' => $beritum,
-            'kategori' => $kategori
-        ]);
-    }
-
-    public function update(Request $request, Berita $beritum)
-    {
-        $data = $request->validate([
-            'judul'       => 'required|string|max:255',
-            'slug'        => 'nullable|string|max:255|unique:beritas,slug,' . $beritum->berita_id . ',berita_id',
-            'kategori_id' => 'required|integer|exists:kategori_beritas,kategori_id',
-            'isi_html'    => 'nullable|string',
-            'penulis'     => 'nullable|string|max:100',
-            'status'      => 'required|string|in:draft,published',
-            'terbit_at'   => 'nullable|date',
-            'cover_image' => 'nullable|image|max:2048',
-            'gallery.*'   => 'nullable|image|max:2048',
-        ]);
-
-        if (empty($data['slug'])) {
-            $data['slug'] = Str::slug($data['judul']);
-        }
-
-        $beritum->update(collect($data)->except(['cover_image', 'gallery'])->toArray());
-
-        // 1. UPDATE COVER (Ganti foto lama)
-        if ($request->hasFile('cover_image')) {
-            $oldMedia = $beritum->media()->where('caption', 'cover_image')->first();
-            if ($oldMedia) {
-                if (Storage::disk('public')->exists($oldMedia->file_url)) {
-                    Storage::disk('public')->delete($oldMedia->file_url);
-                }
-                $oldMedia->delete();
-            }
-
-            $path = $request->file('cover_image')->store('uploads/beritas', 'public');
-            Media::create([
-                'ref_table' => 'beritas',
-                'ref_id'    => $beritum->berita_id,
-                'file_url'  => $path,
-                'caption'   => 'cover_image',
-                'mime_type' => $request->file('cover_image')->getClientMimeType(),
-            ]);
-        }
-
-        // 2. UPDATE GALERI (Tambah foto baru, foto lama tetap ada)
-        if ($request->hasFile('gallery')) {
-            foreach ($request->file('gallery') as $file) {
-                $path = $file->store('uploads/beritas', 'public');
-                Media::create([
-                    'ref_table' => 'beritas',
-                    'ref_id'    => $beritum->berita_id,
                     'file_url'  => $path,
                     'caption'   => 'gallery',
                     'mime_type' => $file->getClientMimeType(),
@@ -145,18 +80,92 @@ class BeritaController extends Controller
             }
         }
 
-        return redirect()->route('berita.index')->with('success', 'Berita berhasil diperbarui');
+        return redirect()->route('berita.index')->with('success', 'Berita berhasil diterbitkan.');
     }
 
-    public function destroy(Berita $beritum)
+    public function show($id)
     {
-        foreach ($beritum->media as $m) {
+        $berita = Berita::with(['media', 'kategoriBerita'])->findOrFail($id);
+        return view('pages.berita.show', compact('berita'));
+    }
+
+    public function edit($id)
+    {
+        // Parameter di route resource defaultnya adalah nama model ('beritum' atau 'berita')
+        // Kita tangkap ID-nya manual agar aman
+        $item = Berita::with(['media', 'kategoriBerita'])->findOrFail($id);
+        $kategori = KategoriBerita::orderBy('nama', 'asc')->get();
+        
+        return view('pages.berita.edit', compact('item', 'kategori'));
+    }
+
+    public function update(Request $request, $id)
+    {
+        $berita = Berita::findOrFail($id);
+
+        $data = $request->validate([
+            'judul'       => 'required|string|max:255',
+            'kategori_id' => 'required|integer',
+            'isi_html'    => 'required|string',
+            'penulis'     => 'required|string|max:100',
+            'status'      => 'required|in:draft,published',
+            'terbit_at'   => 'nullable|date',
+            'cover_image' => 'nullable|image|max:2048',
+            'gallery.*'   => 'nullable|image|max:2048',
+        ]);
+
+        $berita->update(collect($data)->except(['cover_image', 'gallery'])->toArray());
+
+        // 1. Update COVER (Hapus lama, upload baru)
+        if ($request->hasFile('cover_image')) {
+            $oldCover = $berita->media()->where('caption', 'cover_image')->first();
+            if ($oldCover) {
+                if (Storage::disk('public')->exists($oldCover->file_url)) {
+                    Storage::disk('public')->delete($oldCover->file_url);
+                }
+                $oldCover->delete();
+            }
+
+            $path = $request->file('cover_image')->store('uploads/beritas', 'public');
+            Media::create([
+                'ref_table' => 'berita',
+                'ref_id'    => $berita->berita_id,
+                'file_url'  => $path,
+                'caption'   => 'cover_image',
+                'mime_type' => $request->file('cover_image')->getClientMimeType(),
+            ]);
+        }
+
+        // 2. Tambah GALERI Baru (Append)
+        if ($request->hasFile('gallery')) {
+            foreach ($request->file('gallery') as $file) {
+                $path = $file->store('uploads/beritas', 'public');
+                Media::create([
+                    'ref_table' => 'berita',
+                    'ref_id'    => $berita->berita_id,
+                    'file_url'  => $path,
+                    'caption'   => 'gallery',
+                    'mime_type' => $file->getClientMimeType(),
+                ]);
+            }
+        }
+
+        return redirect()->route('berita.index')->with('success', 'Berita berhasil diperbarui.');
+    }
+
+    public function destroy($id)
+    {
+        $berita = Berita::with('media')->findOrFail($id);
+
+        // Hapus semua media terkait
+        foreach ($berita->media as $m) {
             if ($m->file_url && Storage::disk('public')->exists($m->file_url)) {
                 Storage::disk('public')->delete($m->file_url);
             }
             $m->delete();
         }
-        $beritum->delete();
-        return redirect()->route('berita.index')->with('success', 'Berita berhasil dihapus');
+
+        $berita->delete();
+        return redirect()->route('berita.index')->with('success', 'Berita berhasil dihapus.');
     }
 }

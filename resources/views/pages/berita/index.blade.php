@@ -13,70 +13,58 @@
           </a>
         </div>
 
-        <!-- V FORM FILTER & SEARCH (RAFIX) -->
-                <div class="card-body border-bottom py-3">
-                    <form action="{{ route('berita.index') }}" method="GET">
-                        <!-- 1. Hapus 'align-items' dari row -->
-                        <div class="row g-3">
-                            <!-- Search -->
-                            <div class="col-md-4">
-                                <!-- 2. Tambahkan 'mb-0' -->
-                                <div class="input-group input-group-outline mb-0">
-                                    <label class="form-label">Cari Judul/Penulis...</label>
-                                    <input type="text" class="form-control" id="search" name="search"
-                                        value="{{ request('search') }}">
-                                </div>
-                            </div>
-
-                            <!-- Filter Kategori -->
-                            <div class="col-md-3">
-                                <!-- 2. Tambahkan 'mb-0' -->
-                                <div class="input-group input-group-outline mb-0">
-                                    <select class="form-control" id="kategori_id" name="kategori_id">
-                                        <option value="">Semua Kategori</option>
-                                        @foreach ($kategori as $kat)
-                                            <option value="{{ $kat->kategori_id }}"
-                                                {{ request('kategori_id') == $kat->kategori_id ? 'selected' : '' }}>
-                                                {{ $kat->nama }}
-                                            </option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                            </div>
-
-                            <!-- Filter Status -->
-                            <div class="col-md-2">
-                                <!-- 2. Tambahkan 'mb-0' -->
-                                <div class="input-group input-group-outline mb-0">
-                                    <select class="form-control" id="status" name="status">
-                                        <option value="">Semua Status</option>
-                                        <option value="published" {{ request('status') == 'published' ? 'selected' : '' }}>
-                                            Published
-                                        </option>
-                                        <option value="draft" {{ request('status') == 'draft' ? 'selected' : '' }}>
-                                            Draft
-                                        </option>
-                                    </select>
-                                </div>
-                            </div>
-
-                            <!-- Tombol -->
-                            <!-- 3. Tambahkan 'd-flex align-items-end' -->
-                            <div class="col-md-3 d-flex align-items-end">
-                                <button type="submit" class="btn btn-primary me-2">
-                                    <i class="material-icons opacity-10">search</i> Filter
-                                </button>
-                                @if(request('search') || request('kategori_id') || request('status'))
-                                <a href="{{ route('berita.index') }}" class="btn btn-secondary">
-                                Reset
-                                </a>
-                            @endif
-                            </div>
+        <div class="card-body border-bottom py-3">
+            <form action="{{ route('berita.index') }}" method="GET">
+                <div class="row g-3">
+                    <div class="col-md-4">
+                        <div class="input-group input-group-outline mb-0">
+                            <label class="form-label">Cari Judul/Penulis...</label>
+                            <input type="text" class="form-control" id="search" name="search"
+                                value="{{ request('search') }}">
                         </div>
-                    </form>
-                </div>
-                <!-- ^ BATAS AKHIR BLOK FORM -->
+                    </div>
 
+                    <div class="col-md-3">
+                        <div class="input-group input-group-outline mb-0">
+                            <select class="form-control" id="kategori_id" name="kategori_id">
+                                <option value="">Semua Kategori</option>
+                                @foreach ($kategori as $kat)
+                                    <option value="{{ $kat->kategori_id }}"
+                                        {{ request('kategori_id') == $kat->kategori_id ? 'selected' : '' }}>
+                                        {{ $kat->nama }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="col-md-2">
+                        <div class="input-group input-group-outline mb-0">
+                            <select class="form-control" id="status" name="status">
+                                <option value="">Semua Status</option>
+                                <option value="published" {{ request('status') == 'published' ? 'selected' : '' }}>
+                                    Published
+                                </option>
+                                <option value="draft" {{ request('status') == 'draft' ? 'selected' : '' }}>
+                                    Draft
+                                </option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="col-md-3 d-flex align-items-end">
+                        <button type="submit" class="btn btn-primary me-2">
+                            <i class="material-icons opacity-10">search</i> Filter
+                        </button>
+                        @if(request('search') || request('kategori_id') || request('status'))
+                        <a href="{{ route('berita.index') }}" class="btn btn-secondary">
+                            Reset
+                        </a>
+                        @endif
+                    </div>
+                </div>
+            </form>
+        </div>
         <div class="card-body">
           @if(session('success'))
             <div class="alert alert-success text-white">{{ session('success') }}</div>
@@ -87,7 +75,10 @@
               <thead>
                 <tr>
                   <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">No</th>
+                  
+                  {{-- 1. KOLOM COVER DITAMBAHKAN --}}
                   <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Cover</th>
+                  
                   <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Judul Berita</th>
                   <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Kategori</th>
                   <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Penulis</th>
@@ -103,29 +94,25 @@
                     {{ ($items->currentPage() - 1) * $items->perPage() + $index + 1 }}
                   </td>
 
-                  {{-- LOGIKA GAMBAR KOTAK / INISIAL WARNA-WARNI --}}
+                  {{-- 2. TAMPILAN GAMBAR KOTAK --}}
                   <td class="text-center">
                     @if($item->cover)
-                        {{-- GAMBAR KOTAK (border-radius-lg) --}}
                         <img src="{{ asset('storage/' . $item->cover) }}" 
                              alt="cover"
                              class="border-radius-lg border" 
                              style="width: 50px; height: 50px; object-fit: cover;">
                     @else
-                        {{-- INISIAL KOTAK (border-radius-lg) --}}
                         @php
                             $words = explode(' ', $item->judul);
                             $initials = '';
                             foreach($words as $key => $word) {
                                 if($key < 2) $initials .= strtoupper(substr($word, 0, 1));
                             }
-                            // Warna acak
                             $colors = ['bg-gradient-primary', 'bg-gradient-success', 'bg-gradient-info', 'bg-gradient-danger', 'bg-gradient-warning', 'bg-gradient-dark'];
                             $randomColor = $colors[$item->berita_id % count($colors)];
                         @endphp
-                        
                         <div class="border-radius-lg {{ $randomColor }} d-flex justify-content-center align-items-center mx-auto text-white fw-bold shadow-sm" 
-                             style="width: 50px; height: 50px; font-size: 16px; text-shadow: 1px 1px 2px rgba(0,0,0,0.3);">
+                             style="width: 50px; height: 50px;">
                             {{ $initials }}
                         </div>
                     @endif
@@ -148,18 +135,34 @@
                   <td class="text-xs">
                     {{ $item->terbit_at ? \Carbon\Carbon::parse($item->terbit_at)->format('d M Y H:i') : '-' }}
                   </td>
-                  <td class="text-center">
-                    <a href="{{ route('berita.edit', ['beritum' => $item->berita_id]) }}" class="btn btn-sm btn-warning">
-                      <i class="material-icons opacity-10">edit</i> Edit
-                    </a>
-                    <form action="{{ route('berita.destroy', ['beritum' => $item->berita_id]) }}" method="POST" style="display:inline" onsubmit="return confirm('Hapus berita ini?')">
-                        @csrf
-                        @method('DELETE')
-                        <button class="btn btn-sm btn-danger">
-                            <i class="material-icons opacity-10">delete</i> Hapus
-                        </button>
-                    </form>
-                  </td>
+                  
+                  {{-- 3. KOLOM AKSI DENGAN TOMBOL SHOW --}}
+                  <td class="text-center align-middle">
+                  <div class="d-flex justify-content-center gap-2">
+                    {{-- Tombol Detail (Biru Langit) --}}
+                <a href="{{ route('berita.show', $item->berita_id) }}" 
+                 class="btn btn-sm bg-gradient-info mb-0 px-3 shadow-sm" 
+                title="Lihat Detail">
+               <i class="material-icons text-sm me-1">visibility</i> Detail
+              </a>
+
+            {{-- Tombol Edit (Kuning Emas) --}}
+            <a href="{{ route('berita.edit', ['beritum' => $item->berita_id]) }}" 
+             class="btn btn-sm bg-gradient-warning mb-0 px-3 shadow-sm" 
+             title="Edit Data">
+            <i class="material-icons text-sm me-1">edit</i> Edit
+           </a>
+        
+          {{-- Tombol Hapus (Merah) --}}
+          <form action="{{ route('berita.destroy', ['beritum' => $item->berita_id]) }}" method="POST" style="display:inline" onsubmit="return confirm('Yakin ingin menghapus berita ini?')">
+            @csrf
+            @method('DELETE')
+            <button class="btn btn-sm bg-gradient-danger mb-0 px-3 shadow-sm" title="Hapus Permanen">
+                <i class="material-icons text-sm me-1">delete</i> Hapus
+            </button>
+        </form>
+    </div>
+</td>
                 </tr>
                 @empty
                 <tr>

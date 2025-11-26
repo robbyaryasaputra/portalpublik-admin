@@ -133,19 +133,35 @@
                       <span class="badge badge-sm bg-gradient-light text-dark border">{{ $agenda->penyelenggara ?? '-' }}</span>
                   </td>
 
-                  {{-- Kolom Aksi --}}
-                  <td class="text-center">
-                    <a href="{{ route('agenda.edit', $agenda) }}" class="btn btn-sm btn-warning">
-                      <i class="material-icons opacity-10">edit</i> Edit
-                    </a>
-                    <form action="{{ route('agenda.destroy', $agenda) }}" method="POST" style="display:inline-block" onsubmit="return confirm('Hapus agenda ini?')">
-                      @csrf
-                      @method('DELETE')
-                      <button class="btn btn-sm btn-danger">
-                        <i class="material-icons opacity-10">delete</i> Hapus
-                      </button>
-                    </form>
+                  {{-- KOLOM AKSI (YANG DIUBAH SESUAI REQUEST) --}}
+                  <td class="text-center align-middle">
+                    <div class="d-flex justify-content-center gap-2">
+                        
+                        {{-- Tombol Detail (Biru Langit) --}}
+                        <a href="{{ route('agenda.show', $agenda->agenda_id) }}" 
+                           class="btn btn-sm bg-gradient-info mb-0 px-3 shadow-sm" 
+                           title="Lihat Detail">
+                           <i class="material-icons text-sm me-1">visibility</i> Detail
+                        </a>
+
+                        {{-- Tombol Edit (Kuning Emas) --}}
+                        <a href="{{ route('agenda.edit', $agenda->agenda_id) }}" 
+                           class="btn btn-sm bg-gradient-warning mb-0 px-3 shadow-sm" 
+                           title="Edit Data">
+                           <i class="material-icons text-sm me-1">edit</i> Edit
+                        </a>
+                    
+                        {{-- Tombol Hapus (Merah) --}}
+                        <form action="{{ route('agenda.destroy', $agenda->agenda_id) }}" method="POST" style="display:inline" onsubmit="return confirm('Yakin hapus agenda ini?')">
+                            @csrf
+                            @method('DELETE')
+                            <button class="btn btn-sm bg-gradient-danger mb-0 px-3 shadow-sm" title="Hapus Permanen">
+                                <i class="material-icons text-sm me-1">delete</i> Hapus
+                            </button>
+                        </form>
+                    </div>
                   </td>
+                  
                 </tr>
                 @empty
                 <tr>
