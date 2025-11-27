@@ -10,7 +10,7 @@
         <div class="card-header d-flex justify-content-between align-items-center">
           <h6 class="mb-0">Daftar Agenda</h6>
           <a href="{{ route('agenda.create') }}" class="btn btn-sm btn-primary">
-            <i class="material-icons opacity-10 me-1">add</i> Tambah Agenda
+            <i class="material-icons me-1 align-middle" style="font-size: 1.7rem;">add_circle</i> Tambah Agenda
           </a>
         </div>
 
@@ -41,10 +41,10 @@
                         </div>
                     </div>
 
-                    {{-- 3. Tombol Filter & Reset --}}
+                    {{-- 3. Tombol Cari & Reset --}}
                     <div class="col-md-3 d-flex align-items-end">
                         <button type="submit" class="btn btn-primary me-2">
-                            <i class="material-icons opacity-10">search</i> Filter
+                            <i class="material-icons opacity-10">search</i> cari
                         </button>
                         @if(request('search') || request('filter_penyelenggara'))
                             <a href="{{ route('agenda.index') }}" class="btn btn-secondary">

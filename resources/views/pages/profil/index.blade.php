@@ -10,10 +10,11 @@
         {{-- HEADER & TOMBOL TAMBAH --}}
         <div class="card-header d-flex justify-content-between align-items-center">
           <h6 class="mb-0 fw-bold">Daftar Profil Desa</h6>
-          <a href="{{ route('profil.create') }}" class="btn btn-sm btn-primary mb-0">
-            <i class="material-icons opacity-10 me-1">add</i> Tambah Profil
-          </a>
-        </div>
+            <a href="{{ route('profil.create') }}" class="btn btn-sm btn-primary mb-0 ps-2 pe-3">
+          <i class="material-icons me-1 align-middle" style="font-size: 1.7rem;">add_circle</i> 
+          <span class="align-middle">Tambah Profil</span>
+        </a>
+      </div>
 
         {{-- FILTER & SEARCH --}}
         <div class="card-body border-bottom py-3">

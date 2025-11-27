@@ -9,7 +9,7 @@
         <div class="card-header d-flex justify-content-between align-items-center">
           <h6 class="mb-0">Daftar Berita</h6>
           <a href="{{ route('berita.create') }}" class="btn btn-sm btn-primary">
-            <i class="material-icons opacity-10 me-1">add</i> Tambah Berita
+            <i class="material-icons me-1 align-middle" style="font-size: 1.7rem;">add_circle</i> Tambah Berita
           </a>
         </div>
 
@@ -54,7 +54,7 @@
 
                     <div class="col-md-3 d-flex align-items-end">
                         <button type="submit" class="btn btn-primary me-2">
-                            <i class="material-icons opacity-10">search</i> Filter
+                            <i class="material-icons opacity-10">search</i> Cari
                         </button>
                         @if(request('search') || request('kategori_id') || request('status'))
                         <a href="{{ route('berita.index') }}" class="btn btn-secondary">

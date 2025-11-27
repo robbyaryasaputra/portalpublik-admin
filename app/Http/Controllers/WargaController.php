@@ -22,7 +22,7 @@ class WargaController extends Controller
         $wargas = Warga::filter($request, $filterableColumns)
                         ->search($request, $searchableColumns)
                         ->orderBy('created_at', 'desc')
-                        ->paginate(10)
+                        ->paginate(20)
                         ->withQueryString(); // <-- PENTING agar filter tidak hilang saat ganti halaman
 
         return view('pages.warga.index', compact('wargas'));
