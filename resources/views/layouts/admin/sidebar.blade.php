@@ -63,6 +63,16 @@
         </a>
       </li>
 
+      <li class="nav-item">
+        <a class="nav-link text-white {{ request()->routeIs('galeri.*') ? 'active bg-gradient-primary' : '' }}" href="{{ route('galeri.index') }}">
+        <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+        {{-- Icon Tumpukan Foto --}}
+        <i class="material-icons opacity-10">collections</i>
+      </div>
+      <span class="nav-link-text ms-1">Galeri</span>
+      </a>
+    </li>
+
       <li class="nav-item mt-3">
         <h6 class="ps-4 ms-2 text-uppercase text-xs text-white font-weight-bolder opacity-8">Master Data</h6>
       </li>
@@ -85,15 +95,7 @@
         </a>
       </li>
 
-      <li class="nav-item">
-        <a class="nav-link text-white {{ request()->routeIs('galeri.*') ? 'active bg-gradient-primary' : '' }}" href="{{ route('galeri.index') }}">
-        <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
-        {{-- Icon Tumpukan Foto --}}
-        <i class="material-icons opacity-10">collections</i>
-      </div>
-      <span class="nav-link-text ms-1">Galeri</span>
-      </a>
-    </li>
+      
 
       </ul>
   </div>
