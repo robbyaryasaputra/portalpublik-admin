@@ -1,10 +1,10 @@
 <?php
+
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
-use App\Models\User;
 
 class AuthController extends Controller
 {
@@ -32,14 +32,24 @@ class AuthController extends Controller
             'password' => $request->password,
         ];
 
-        // Coba authenticate menggunakan guard default
+        
         if (Auth::attempt($credentials)) {
-            // Regenerate session untuk mencegah session fixation
-            $request->session()->regenerate();
-            return redirect()->intended(route('dashboard.index'));
-        }
+        $request->session()->regenerate();
 
-        // Jika gagal, kembali ke form login dengan pesan error
-        return back()->withErrors(['credentials' => 'Email atau password salah'])->withInput();
+        session(['last_login' => now()->setTimezone('Asia/Jakarta')->format('d M Y, H:i')]);
+        // -------------------------------------------
+
+        return redirect()->intended(route('dashboard.index'));
+    }
+
+    return back()->withErrors(['credentials' => 'Email atau password salah'])->withInput();
+}
+
+    public function logout(Request $request)
+    {
+        Auth::logout(); // Log out user
+        $request->session()->invalidate(); // Invalidasi session
+        $request->session()->regenerateToken(); // Regenerate CSRF token untuk keamanan
+        return redirect()->route('login.form'); // Arahkan kembali ke halaman login
     }
 }

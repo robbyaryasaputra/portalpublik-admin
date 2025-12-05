@@ -24,7 +24,8 @@
                             </div>
                         @endif
 
-                        <form action="{{ route('user.store') }}" method="POST" class="form-dark-pink">
+                        <form action="{{ route('user.store') }}" method="POST" class="form-dark-pink" enctype="multipart/form-data">
+                            enctype="multipart/form-data">
                             {{-- ========== AWAL KODE DARI _form.blade.php ========== --}}
                             @csrf
                             @php
@@ -39,9 +40,19 @@
                                 <h6 class="mb-0 text-uppercase text-primary fw-bold">Identitas Pengguna</h6>
                             </div>
 
+
+
                             <div class="card card-body border border-light shadow-none mb-4"
                                 style="background-color: #f8f9fa;">
                                 <div class="row g-3">
+                                    <div class="col-md-12">
+                                        <label class="form-label fw-bold text-dark">Foto Profil</label>
+                                        <div class="input-group">
+                                            <input type="file" name="avatar" class="form-control bg-white border px-3"
+                                                accept="image/*">
+                                        </div>
+                                        <small class="text-muted text-xs">Format: JPG, PNG. Maks: 2MB.</small>
+                                    </div>
                                     {{-- Nama --}}
                                     <div class="col-md-6">
                                         <label for="name" class="form-label fw-bold text-dark">Nama Lengkap <span
@@ -57,6 +68,7 @@
                                         </div>
                                     </div>
 
+
                                     {{-- Email --}}
                                     <div class="col-md-6">
                                         <label for="email" class="form-label fw-bold text-dark">Alamat Email <span
@@ -69,6 +81,22 @@
                                                 class="form-control bg-white border border-start-0 px-2 text-dark"
                                                 style="color: #333 !important;" value="{{ old('email') }}"
                                                 placeholder="admin@contoh.com" required>
+                                        </div>
+                                    </div>
+
+                                    {{-- TAMBAHAN: INPUT ROLE --}}
+                                    <div class="col-md-12">
+                                        <label for="role" class="form-label fw-bold text-dark">Role / Hak Akses <span class="text-danger">*</span></label>
+                                        <div class="input-group">
+                                            <span class="input-group-text bg-white border-end-0">
+                                                <i class="material-icons text-sm">admin_panel_settings</i>
+                                            </span>
+                                            <select id="role" name="role" class="form-control bg-white border border-start-0 px-2 text-dark"
+                                                style="color: #333 !important;" required>
+                                                <option value="" selected disabled>-- Pilih Role --</option>
+                                                <option value="admin" {{ old('role') == 'admin' ? 'selected' : '' }}>Admin</option>
+                                                <option value="guest" {{ old('role') == 'guest' ? 'selected' : '' }}>Guest</option>
+                                            </select>
                                         </div>
                                     </div>
                                 </div>

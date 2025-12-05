@@ -6,6 +6,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Media;
 
 class Warga extends Model
 {
@@ -26,11 +27,16 @@ class Warga extends Model
         'email',
     ];
 
-    // V 2. TAMBAHKAN DUA FUNGSI (SCOPE) DI BAWAH INI
+    public function media()
+    {
+        return $this->hasMany(Media::class, 'ref_id', 'warga_id')->where('ref_table', 'wargas');
+    }
+    public function getAvatarAttribute()
+    {
+        $media = $this->media()->where('caption', 'avatar')->first();
+        return $media ? $media->file_url : null;
+    }
 
-    /**
-     * Scope: Filter berdasarkan kolom yang dapat difilter
-     */
     public function scopeFilter(Builder $query, $request, array $filterableColumns = []): Builder
     {
         if (!$request) {

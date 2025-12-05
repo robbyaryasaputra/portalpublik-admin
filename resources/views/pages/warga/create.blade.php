@@ -20,7 +20,7 @@
                     </div>
                 @endif
 
-                <form action="{{ route('warga.store') }}" method="POST" class="warga-form">
+                <form action="{{ route('warga.store') }}" method="POST" class="warga-form" enctype="multipart/form-data">
                     @csrf
 
                     {{-- SECTION 1: IDENTITAS PRIBADI --}}
@@ -31,6 +31,16 @@
 
                     <div class="card card-body border border-light shadow-none mb-4" style="background-color: #f8f9fa;">
                         <div class="row g-3">
+                            <div class="row mb-4">
+                                <div class="col-md-12">
+                                    <label class="form-label fw-bold text-dark">Foto Profil</label>
+                                    <div class="input-group">
+                                        <input type="file" name="foto" class="form-control bg-white border px-3"
+                                            accept="image/*">
+                                    </div>
+                                    <small class="text-muted text-xs">Opsional. Format: JPG, PNG. Maks: 2MB.</small>
+                                </div>
+                            </div>
 
                             {{-- Nama Lengkap --}}
                             <div class="col-md-6">
@@ -82,19 +92,7 @@
                                 </div>
                             </div>
 
-                            {{-- No. KK --}}
-                            <div class="col-md-6">
-                                <label class="form-label fw-bold text-dark">No. Kartu Keluarga (KK)</label>
-                                <div class="input-group">
-                                    <span class="input-group-text bg-white border-end-0"><i
-                                            class="material-icons text-sm">family_restroom</i></span>
-                                    {{-- FIX: Warna Teks --}}
-                                    <input type="text" name="no_kk"
-                                        class="form-control bg-white border border-start-0 px-2 text-dark"
-                                        style="color: #333 !important;" value="{{ old('no_kk') }}"
-                                        placeholder="16 digit Nomor KK..." maxlength="16">
-                                </div>
-                            </div>
+                            
 
                         </div>
                     </div>

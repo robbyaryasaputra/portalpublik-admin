@@ -56,39 +56,88 @@
                             <table class="table align-items-center mb-0">
                                 <thead>
                                     <tr>
-                                        <th class="text-center">NO</th>
-                                        <th>Name</th>
-                                        <th>Email</th>
-                                        <th class="text-center">Aksi</th>
+                                        <th
+                                            class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                                            NO</th>
+                                        {{-- TAMBAHAN KOLOM FOTO --}}
+                                        <th
+                                            class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
+                                            Foto</th>
+                                        <th
+                                            class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
+                                            Name</th>
+                                        <th
+                                            class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
+                                            Email</th>
+                                            {{-- TAMBAHAN: HEADER ROLE --}}
+                                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
+                                            Role</th>
+                                        <th
+                                            class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                                            Aksi</th>
                                     </tr>
                                 </thead>
+                                {{-- Di bagian <tbody> --}}
                                 <tbody>
                                     @forelse($items as $index => $item)
                                         <tr>
                                             <td class="text-center">
                                                 {{ ($items->currentPage() - 1) * $items->perPage() + $index + 1 }}
                                             </td>
+
+                                            {{-- TAMPILKAN FOTO --}}
+                                            <td>
+                                                @if ($item->avatar)
+                                                    <img src="{{ asset('storage/' . $item->avatar) }}"
+                                                        class="avatar avatar-sm rounded-circle me-2" alt="user1">
+                                                @else
+                                                    <div
+                                                        class="avatar avatar-sm rounded-circle bg-gradient-secondary d-flex align-items-center justify-content-center">
+                                                        <span
+                                                            class="text-white text-xs">{{ substr($item->name, 0, 1) }}</span>
+                                                    </div>
+                                                @endif
+                                            </td>
+
                                             <td>{{ $item->name }}</td>
                                             <td>{{ $item->email }}</td>
-                                            <td class="text-center">
-                                                {{-- Tombol Edit (Kuning Emas) --}}
-                                                <a href="{{ route('user.edit', $item->id) }}"
-                                                    class="btn btn-sm bg-gradient-warning mb-0 px-3 shadow-sm"
-                                                    title="Edit Data">
-                                                    <i class="material-icons text-sm me-1">edit</i> Edit
-                                                </a>
+                                            <td class="align-middle text-sm">
+                                                @if ($item->role == 'admin')
+                                                    <span class="badge badge-sm bg-gradient-success">Admin</span>
+                                                @else
+                                                    <span class="badge badge-sm bg-gradient-secondary">Guest</span>
+                                                @endif
+                                            </td>
+                                            
 
-                                                {{-- Tombol Hapus (Merah) --}}
-                                                <form action="{{ route('user.destroy', $item->id) }}" method="POST"
-                                                    style="display:inline"
-                                                    onsubmit="return confirm('Yakin ingin menghapus album ini beserta seluruh fotonya?')">
-                                                    @csrf
-                                                    @method('DELETE')
-                                                    <button class="btn btn-sm bg-gradient-danger mb-0 px-3 shadow-sm"
-                                                        title="Hapus Permanen">
-                                                        <i class="material-icons text-sm me-1">delete</i> Hapus
-                                                    </button>
-                                                </form>
+                                            {{-- 5. AKSI (STYLE BARU SESUAI PERMINTAAN) --}}
+                                            <td class="text-center align-middle">
+                                                <div class="d-flex justify-content-center gap-2">
+
+                                                    {{-- Tombol Detail (Hitam / Dark) --}}
+                                                    <a href="{{ route('user.show', $item->id) }}"
+                                                        class="btn btn-sm btn-outline-dark mb-0 px-3" title="Lihat Detail">
+                                                        <i class="material-icons text-sm me-1">visibility</i> Detail
+                                                    </a>
+
+                                                    {{-- Tombol Edit (Cyan / Info) --}}
+                                                    <a href="{{ route('user.edit', $item->id) }}"
+                                                        class="btn btn-sm btn-outline-info mb-0 px-3" title="Edit Data">
+                                                        <i class="material-icons text-sm me-1">edit</i> Edit
+                                                    </a>
+
+                                                    {{-- Tombol Hapus (Merah / Danger) --}}
+                                                    <form action="{{ route('user.destroy', $item->id) }}"
+                                                        method="POST" style="display:inline"
+                                                        onsubmit="return confirm('Yakin ingin menghapus data profil desa ini?')">
+                                                        @csrf
+                                                        @method('DELETE')
+                                                        <button class="btn btn-sm btn-outline-danger mb-0 px-3"
+                                                            title="Hapus Permanen">
+                                                            <i class="material-icons text-sm me-1">delete</i> Hapus
+                                                        </button>
+                                                    </form>
+                                                </div>
                                             </td>
                                         </tr>
                                     @empty

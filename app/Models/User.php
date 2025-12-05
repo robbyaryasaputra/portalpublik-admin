@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use App\Models\Media; 
 
 class User extends Authenticatable
 {
@@ -23,6 +24,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'role',
     ];
 
     /**
@@ -48,6 +50,20 @@ class User extends Authenticatable
         ];
     }
 
+    public function media()
+    {
+        return $this->hasMany(Media::class, 'ref_id', 'id')->where('ref_table', 'users');
+    }
+
+    public function getAvatarAttribute()
+    {
+        // Cari media dengan caption 'avatar'
+        $media = $this->media()->where('caption', 'avatar')->first();
+        
+        // Jika ada, kembalikan URL-nya. Jika tidak, pakai gambar default placeholder
+        return $media ? $media->file_url : null;
+    }
+
     // V 2. TAMBAHKAN DUA FUNGSI (SCOPE) DI BAWAH INI
 
     /**
@@ -69,9 +85,8 @@ class User extends Authenticatable
         return $query;
     }
 
-    /**
-     * Scope: Search berdasarkan kolom yang dapat dicari
-     */
+    
+     // Scope: Search berdasarkan kolom yang dapat dicari
     public function scopeSearch(Builder $query, $request, array $searchableColumns = []): Builder
     {
         if (!$request || !$request->filled('search')) {

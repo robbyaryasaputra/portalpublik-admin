@@ -11,33 +11,36 @@ use App\Http\Controllers\ProfilController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\KategoriBeritaController;
 
-Route::get('/', function () {
+/*
+|--------------------------------------------------------------------------
+| Public Routes (Bisa diakses tanpa login)
+|--------------------------------------------------------------------------
+*/
 
-});
-
-// Route untuk menampilkan halaman login (method GET)
+// Route redirect root ke halaman login
 Route::get('/', [AuthController::class, 'index'])->name('login.form');
 
-// Route untuk memproses form login (method POST)
+// Route untuk memproses login
 Route::post('/admin/login', [AuthController::class, 'login'])->name('login.process');
 
-Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard.index');
 
-// Resource routes untuk CRUD Warga
-Route::resource('warga', WargaController::class);
+// Menggunakan alias 'checkislogin' yang sudah didaftarkan di app.php
+Route::middleware(['checkislogin'])->group(function () {
 
-// Resource routes untuk CRUD Profil
-Route::resource('profil', ProfilController::class);
+    // Logout (Hanya bisa logout jika sudah login)
+    Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard.index');
 
-// Resource routes untuk CRUD Kategori Berita
-Route::resource('kategori-berita', KategoriBeritaController::class);
+    Route::middleware(['checkrole:admin'])->group(function () {
+        Route::resource('user', UserController::class);
+    });
 
-// Resource routes untuk CRUD User
-Route::resource('user', UserController::class);
+    // Resource routes untuk CRUD
+    Route::resource('warga', WargaController::class);
+    Route::resource('profil', ProfilController::class);
+    Route::resource('kategori-berita', KategoriBeritaController::class);
+    Route::resource('berita', BeritaController::class);
+    Route::resource('agenda', AgendaController::class);
+    Route::resource('galeri', GaleriController::class);
 
-// Resource routes untuk CRUD Berita
-Route::resource('berita', BeritaController::class);
-
-Route::resource('agenda', AgendaController::class);
-
-Route::resource('galeri', GaleriController::class);
+});

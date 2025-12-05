@@ -47,7 +47,7 @@ class KategoriBeritaController extends Controller
     // Menampilkan satu kategori
     public function show(KategoriBerita $kategori_beritum)
     {
-        //return view('pages.kategori-berita.show', ['item' => $kategori_beritum]);
+        return view('pages.kategori-berita.show', ['item' => $kategori_beritum]);
     }
 
     // Menampilkan form edit

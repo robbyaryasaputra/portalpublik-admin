@@ -73,25 +73,34 @@
                                             <td>{{ $item->nama }}</td>
                                             <td>{{ $item->slug }}</td>
                                             <td>{{ \Illuminate\Support\Str::limit($item->deskripsi, 80) }}</td>
-                                            <td class="text-center">
-                                                {{-- Tombol Edit (Kuning Emas) --}}
-                                                <a href="{{ route('kategori-berita.edit', $item->kategori_id) }}"
-                                                    class="btn btn-sm bg-gradient-warning mb-0 px-3 shadow-sm"
-                                                    title="Edit Data">
-                                                    <i class="material-icons text-sm me-1">edit</i> Edit
-                                                </a>
+                                                                     {{-- 5. AKSI (STYLE BARU SESUAI PERMINTAAN) --}}
+                                            <td class="text-center align-middle">
+                                                <div class="d-flex justify-content-center gap-2">
 
-                                                {{-- Tombol Hapus (Merah) --}}
-                                                <form action="{{ route('kategori-berita.destroy', $item->kategori_id) }}"
-                                                    method="POST" style="display:inline"
-                                                    onsubmit="return confirm('Yakin ingin menghapus album ini beserta seluruh fotonya?')">
-                                                    @csrf
-                                                    @method('DELETE')
-                                                    <button class="btn btn-sm bg-gradient-danger mb-0 px-3 shadow-sm"
-                                                        title="Hapus Permanen">
-                                                        <i class="material-icons text-sm me-1">delete</i> Hapus
-                                                    </button>
-                                                </form>
+                                                    {{-- Tombol Detail (Hitam / Dark) --}}
+                                                    <a href="{{ route('kategori-berita.show', $item->kategori_id) }}"
+                                                        class="btn btn-sm btn-outline-dark mb-0 px-3" title="Lihat Detail">
+                                                        <i class="material-icons text-sm me-1">visibility</i> Detail
+                                                    </a>
+
+                                                    {{-- Tombol Edit (Cyan / Info) --}}
+                                                    <a href="{{ route('kategori-berita.edit', $item->kategori_id) }}"
+                                                        class="btn btn-sm btn-outline-info mb-0 px-3" title="Edit Data">
+                                                        <i class="material-icons text-sm me-1">edit</i> Edit
+                                                    </a>
+
+                                                    {{-- Tombol Hapus (Merah / Danger) --}}
+                                                    <form action="{{ route('kategori-berita.destroy', $item->kategori_id) }}"
+                                                        method="POST" style="display:inline"
+                                                        onsubmit="return confirm('Yakin ingin menghapus data kategori berita ini?')">
+                                                        @csrf
+                                                        @method('DELETE')
+                                                        <button class="btn btn-sm btn-outline-danger mb-0 px-3"
+                                                            title="Hapus Permanen">
+                                                            <i class="material-icons text-sm me-1">delete</i> Hapus
+                                                        </button>
+                                                    </form>
+                                                </div>
                                             </td>
                                         </tr>
                                     @empty

@@ -141,34 +141,36 @@
                     <p class="text-xs text-secondary mb-0">{{ $item->created_at->format('H:i') }} WIB</p>
                   </td>
                   
-                  {{-- 7. TOMBOL AKSI (STYLE BERITA) --}}
-                  <td class="text-center align-middle">
-                    <div class="d-flex justify-content-center gap-2">
-                        
-                        {{-- Tombol Detail (Biru Langit) --}}
-                        <a href="{{ route('galeri.show', $item->galeri_id) }}" 
-                           class="btn btn-sm bg-gradient-info mb-0 px-3 shadow-sm" 
-                           title="Lihat Detail">
-                           <i class="material-icons text-sm me-1">visibility</i> Detail
-                        </a>
+                  
+                                            {{-- 5. AKSI (STYLE BARU SESUAI PERMINTAAN) --}}
+                                            <td class="text-center align-middle">
+                                                <div class="d-flex justify-content-center gap-2">
 
-                        {{-- Tombol Edit (Kuning Emas) --}}
-                        <a href="{{ route('galeri.edit', $item->galeri_id) }}" 
-                           class="btn btn-sm bg-gradient-warning mb-0 px-3 shadow-sm" 
-                           title="Edit Data">
-                           <i class="material-icons text-sm me-1">edit</i> Edit
-                        </a>
-                    
-                        {{-- Tombol Hapus (Merah) --}}
-                        <form action="{{ route('galeri.destroy', $item->galeri_id) }}" method="POST" style="display:inline" onsubmit="return confirm('Yakin ingin menghapus album ini beserta seluruh fotonya?')">
-                            @csrf
-                            @method('DELETE')
-                            <button class="btn btn-sm bg-gradient-danger mb-0 px-3 shadow-sm" title="Hapus Permanen">
-                                <i class="material-icons text-sm me-1">delete</i> Hapus
-                            </button>
-                        </form>
-                    </div>
-                  </td>
+                                                    {{-- Tombol Detail (Hitam / Dark) --}}
+                                                    <a href="{{ route('galeri.show', $item->galeri_id) }}"
+                                                        class="btn btn-sm btn-outline-dark mb-0 px-3" title="Lihat Detail">
+                                                        <i class="material-icons text-sm me-1">visibility</i> Detail
+                                                    </a>
+
+                                                    {{-- Tombol Edit (Cyan / Info) --}}
+                                                    <a href="{{ route('galeri.edit', $item->galeri_id) }}"
+                                                        class="btn btn-sm btn-outline-info mb-0 px-3" title="Edit Data">
+                                                        <i class="material-icons text-sm me-1">edit</i> Edit
+                                                    </a>
+
+                                                    {{-- Tombol Hapus (Merah / Danger) --}}
+                                                    <form action="{{ route('galeri.destroy', $item->galeri_id) }}"
+                                                        method="POST" style="display:inline"
+                                                        onsubmit="return confirm('Yakin ingin menghapus data profil desa ini?')">
+                                                        @csrf
+                                                        @method('DELETE')
+                                                        <button class="btn btn-sm btn-outline-danger mb-0 px-3"
+                                                            title="Hapus Permanen">
+                                                            <i class="material-icons text-sm me-1">delete</i> Hapus
+                                                        </button>
+                                                    </form>
+                                                </div>
+                                            </td>
                 </tr>
                 @empty
                 <tr>
