@@ -17,10 +17,42 @@ class GaleriSeeder extends Seeder
     {
         $faker = Faker::create('id_ID');
 
+        // 1. Daftar Kegiatan untuk Judul Album
+        $jenisKegiatan = [
+            'Gotong Royong', 'Musyawarah Desa', 'Penyaluran BLT', 
+            'Posyandu Balita', 'Senam Pagi Bersama', 'Rapat Koordinasi',
+            'Kunjungan Bupati', 'Pelatihan UMKM', 'Panen Raya',
+            'Peringatan HUT RI', 'Perbaikan Jalan', 'Sosialisasi Kesehatan'
+        ];
+
+        // 2. Keterangan Tambahan untuk Judul
+        $konteks = [
+            '2023', '2024', 'di Balai Desa', 'Tingkat Kecamatan',
+            'Bersama Warga', 'Tahap 1', 'Edisi Spesial', 'Akhir Tahun'
+        ];
+
+        // 3. Template Kalimat untuk Deskripsi
+        $awalKalimat = [
+            'Berikut adalah dokumentasi keseruan acara',
+            'Momen-momen penting yang tertangkap kamera saat kegiatan',
+            'Dokumentasi resmi dari pelaksanaan',
+            'Arsip foto kegiatan'
+        ];
+
         foreach (range(1, 100) as $index) {
+            
+            // Membuat Judul: "Gotong Royong Bersama Warga" atau "Rapat Koordinasi 2024"
+            $kegiatanTerpilih = $faker->randomElement($jenisKegiatan);
+            $judul = "Dokumentasi $kegiatanTerpilih " . $faker->randomElement($konteks);
+
+            // Membuat Deskripsi yang nyambung dengan judul
+            $deskripsi = $faker->randomElement($awalKalimat) . ' ' . strtolower($kegiatanTerpilih) . 
+                         ' yang dilaksanakan pada tanggal ' . $faker->date('d F Y') . '. ' .
+                         'Acara berjalan dengan lancar dan dihadiri oleh banyak peserta.';
+
             Galeri::create([
-                'judul'     => $faker->words(3, true) . ' Activity',
-                'deskripsi' => $faker->paragraph(2),
+                'judul'     => $judul,
+                'deskripsi' => $deskripsi,
             ]);
         }
     }

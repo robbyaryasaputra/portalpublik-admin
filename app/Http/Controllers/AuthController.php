@@ -37,7 +37,7 @@ class AuthController extends Controller
         $request->session()->regenerate();
 
         session(['last_login' => now()->setTimezone('Asia/Jakarta')->format('d M Y, H:i')]);
-        // -------------------------------------------
+     
 
         return redirect()->intended(route('dashboard.index'));
     }

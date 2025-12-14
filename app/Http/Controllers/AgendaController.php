@@ -34,7 +34,7 @@ class AgendaController extends Controller
         }
 
         $agendas = $query->orderBy('tanggal_mulai', 'desc')
-                         ->paginate(20)
+                         ->paginate(30)
                          ->withQueryString();
 
         return view('pages.agenda.index', compact('agendas', 'penyelenggaraList'));

@@ -3,8 +3,8 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use App\Models\Profil; // <-- Import model Profil
-use Faker\Factory as Faker; // <-- Import Faker
+use App\Models\Profil;
+use Faker\Factory as Faker;
 
 class ProfilSeeder extends Seeder
 {
@@ -13,21 +13,62 @@ class ProfilSeeder extends Seeder
      */
     public function run(): void
     {
-        // Inisialisasi Faker
         $faker = Faker::create('id_ID');
-        // Buat 100 data Profil
+
+        // 1. Bank Kata untuk Nama Desa (Agar terdengar seperti nama tempat)
+        $prefixDesa = ['Suka', 'Mekar', 'Cia', 'Bojong', 'Tanja', 'Wana', 'Pura', 'Jaya', 'Sumber', 'Tirta'];
+        $suffixDesa = ['Maju', 'Sari', 'Wangi', 'Bakti', 'Raya', 'Mulya', 'Harapan', 'Makmur', 'Jaya', 'Abadi'];
+
+        // 2. Bank Kalimat Visi (Cita-cita Desa)
+        $daftarVisi = [
+            'Terwujudnya desa yang mandiri, sejahtera, dan berakhlak mulia.',
+            'Mewujudkan pelayanan publik yang prima menuju desa digital yang cerdas.',
+            'Menjadi desa agrowisata yang unggul dan berdaya saing tinggi.',
+            'Terciptanya tata kelola pemerintahan yang transparan dan akuntabel.',
+            'Membangun masyarakat yang gotong royong, aman, dan damai.'
+        ];
+
+        // 3. Bank Kalimat Misi (Langkah-langkah)
+        $daftarMisi = [
+            'Meningkatkan kualitas sumber daya manusia melalui pendidikan dan pelatihan.',
+            'Mengembangkan potensi ekonomi lokal berbasis kerakyatan.',
+            'Meningkatkan pembangunan infrastruktur desa yang merata.',
+            'Mewujudkan pemerintahan desa yang bersih, transparan, dan melayani.',
+            'Melestarikan nilai-nilai budaya dan kearifan lokal.',
+            'Meningkatkan derajat kesehatan masyarakat dan kebersihan lingkungan.',
+            'Memperkuat keamanan dan ketertiban masyarakat secara partisipatif.'
+        ];
+
         foreach (range(1, 100) as $index) {
+            
+            // Membuat Nama Desa: Gabungan Prefix + Suffix (Contoh: "Sukamaju", "Mekarsari")
+            $namaDesa = $faker->randomElement($prefixDesa) . strtolower($faker->randomElement($suffixDesa));
+
+            // Membuat Misi: Mengambil 3 sampai 5 poin misi secara acak lalu digabung
+            $misiTerpilih = $faker->randomElements($daftarMisi, rand(3, 5));
+            // Format misi menjadi list angka (1. xxx 2. xxx)
+            $misiText = "";
+            foreach ($misiTerpilih as $key => $misi) {
+                $nomor = $key + 1;
+                $misiText .= "{$nomor}. {$misi}\n";
+            }
+
             Profil::create([
-                // Kita tambahkan $index di nama desa agar unik
-                'nama_desa' => 'Desa ' . $faker->lastName() . ' ' . $index,
-                'kecamatan' => 'Kecamatan ' . $faker->city(),
-                'kabupaten' => 'Kabupaten ' . $faker->city(),
-                'provinsi' => $faker->state(),
+                // Nama Desa lebih realistis daripada menggunakan lastName
+                'nama_desa'     => 'Desa ' . $namaDesa, 
+                
+                // Menggunakan citySuffix (Sari, Baru, dll) atau nama jalan agar tidak selalu "Kecamatan Kota X"
+                'kecamatan'     => 'Kecamatan ' . $faker->streetName(), 
+                
+                'kabupaten'     => $faker->city(), // Contoh: Kota Bandung / Kab. Bandung
+                'provinsi'      => $faker->state(),
                 'alamat_kantor' => $faker->address(),
-                'email' => $faker->unique()->companyEmail(), // Pastikan email unik
-                'telepon' => $faker->phoneNumber(),
-                'visi' => $faker->realText(150), // Buat kalimat Visi
-                'misi' => $faker->realText(400), // Buat paragraf Misi
+                'email'         => 'admin@' . strtolower($namaDesa) . '.desa.id', // Email terlihat resmi
+                'telepon'       => $faker->phoneNumber(),
+                
+                // Visi & Misi Realistis
+                'visi'          => $faker->randomElement($daftarVisi),
+                'misi'          => $misiText,
             ]);
         }
     }

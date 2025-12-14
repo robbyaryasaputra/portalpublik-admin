@@ -109,33 +109,11 @@
                                                             style="width: 50px; height: 50px; object-fit: cover;">
                                                     </a>
                                                 @else
-                                                    {{-- Jika TIDAK Ada Poster (Gunakan Inisial Warna-Warni seperti contoh) --}}
-                                                    @php
-                                                        // 1. Buat Inisial dari Judul
-                                                        $words = explode(' ', $agenda->judul);
-                                                        $initials = '';
-                                                        foreach ($words as $key => $word) {
-                                                            if ($key < 2) {
-                                                                $initials .= strtoupper(substr($word, 0, 1));
-                                                            }
-                                                        }
-
-                                                        // 2. Pilih Warna Acak Berdasarkan ID
-                                                        $colors = [
-                                                            'bg-gradient-primary',
-                                                            'bg-gradient-success',
-                                                            'bg-gradient-info',
-                                                            'bg-gradient-danger',
-                                                            'bg-gradient-warning',
-                                                            'bg-gradient-dark',
-                                                        ];
-                                                        $randomColor = $colors[$agenda->agenda_id % count($colors)];
-                                                    @endphp
-
-                                                    <div class="{{ $randomColor }} d-flex justify-content-center align-items-center mx-auto text-white fw-bold shadow-sm border-radius-lg"
-                                                        style="width: 50px; height: 50px; font-size: 18px; text-shadow: 1px 1px 2px rgba(0,0,0,0.3);">
-                                                        {{ $initials }}
-                                                    </div>
+                                                    <a href="{{ asset('assets-admin/img/illustrations/illustration-signup.jpg') }}" target="_blank">
+                                                        <img src="{{ asset('assets-admin/img/illustrations/illustration-signup.jpg') }}"
+                                                            alt="default-poster" class="border-radius-lg border shadow-sm"
+                                                            style="width: 50px; height: 50px; object-fit: cover; opacity: 0.8;">
+                                                    </a>
                                                 @endif
                                             </td>
 

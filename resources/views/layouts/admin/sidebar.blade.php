@@ -5,11 +5,18 @@
         <i class="fas fa-times p-3 cursor-pointer text-white opacity-5 position-absolute end-0 top-0 d-none d-xl-none"
             aria-hidden="true" id="iconSidenav"></i>
         <a class="navbar-brand m-0" href="javascript:void(0)" style="display: flex; align-items: center;">
-            <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24" fill="none"
-                stroke="#e91e63" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                class="feather feather-home" style="margin-right: 10px;">
-                <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
-                <polyline points="9 22 9 12 15 12 15 22"></polyline>
+
+            <svg xmlns="http://www.w3.org/2000/svg" width="38" height="38" viewBox="0 0 100 100" fill="none"
+                stroke="#e91e63" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"
+                style="margin-right: 10px;">
+                <circle cx="50" cy="50" r="45" />
+                <rect x="30" y="30" width="40" height="40" rx="4" />
+                <line x1="50" y1="20" x2="50" y2="80" />
+                <line x1="20" y1="50" x2="80" y2="50" />
+                <path d="M 30 50 L 30 30 L 50 30" stroke-width="6" />
+                <path d="M 70 50 L 70 30 L 50 30" stroke-width="6" />
+                <path d="M 30 50 L 30 70 L 50 70" stroke-width="6" />
+                <path d="M 70 50 L 70 70 L 50 70" stroke-width="6" />
             </svg>
             <span class="ms-1 font-weight-bold text-white">Portal Publik</span>
         </a>
@@ -110,15 +117,15 @@
         </ul>
     </div>
 
-   <div class="sidenav-footer position-absolute w-100 bottom-0 ">
-  <div class="mx-3">
-    {{-- Menggunakan Form POST untuk keamanan --}}
-    <form action="{{ route('logout') }}" method="POST">
-        @csrf
-        <button type="submit" class="btn bg-gradient-primary mt-4 w-100">
-            logout
-        </button>
-    </form>
-  </div>
-</div>
+    <div class="sidenav-footer position-absolute w-100 bottom-0 ">
+        <div class="mx-3">
+            {{-- Menggunakan Form POST untuk keamanan --}}
+            <form action="{{ route('logout') }}" method="POST">
+                @csrf
+                <button type="submit" class="btn bg-gradient-primary mt-4 w-100">
+                    logout
+                </button>
+            </form>
+        </div>
+    </div>
 </aside>

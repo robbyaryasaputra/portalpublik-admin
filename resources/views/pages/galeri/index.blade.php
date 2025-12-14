@@ -88,33 +88,24 @@
                     </span>
                   </td>
 
-                  {{-- 2. COVER / AVATAR INISIAL (LOGIKA DARI BERITA) --}}
-                  <td class="text-center align-middle">
-                    @if($item->sampul)
-                        {{-- Jika ada foto, tampilkan foto --}}
-                        <img src="{{ asset('storage/' . $item->sampul) }}" 
-                             alt="cover"
-                             class="border-radius-lg border shadow-sm" 
-                             style="width: 50px; height: 50px; object-fit: cover;">
-                    @else
-                        {{-- Jika TIDAK ada foto, buat Inisial Huruf dengan Background Warna-warni --}}
-                        @php
-                            $words = explode(' ', $item->judul);
-                            $initials = '';
-                            foreach($words as $key => $word) {
-                                if($key < 2) $initials .= strtoupper(substr($word, 0, 1));
-                            }
-                            // Array warna background gradient
-                            $colors = ['bg-gradient-primary', 'bg-gradient-success', 'bg-gradient-info', 'bg-gradient-danger', 'bg-gradient-warning', 'bg-gradient-dark'];
-                            // Pilih warna berdasarkan ID agar konsisten (tidak berubah saat refresh)
-                            $randomColor = $colors[$item->galeri_id % count($colors)];
-                        @endphp
-                        <div class="border-radius-lg {{ $randomColor }} d-flex justify-content-center align-items-center mx-auto text-white fw-bold shadow-sm" 
-                             style="width: 50px; height: 50px; font-size: 14px;">
-                            {{ $initials }}
-                        </div>
-                    @endif
-                  </td>
+                  {{-- 2. COVER ALBUM --}}
+<td class="text-center align-middle">
+    @if($item->sampul)
+        {{-- KONDISI 1: Jika Ada Sampul Uploaded --}}
+        <img src="{{ asset('storage/' . $item->sampul) }}" 
+             alt="cover"
+             class="border-radius-lg border shadow-sm" 
+             style="width: 50px; height: 50px; object-fit: cover;">
+    @else
+        {{-- KONDISI 2: Jika TIDAK Ada Sampul (Tampilkan Placeholder) --}}
+        {{-- Pastikan file gambar tersedia di: public/assets/img/gallery-placeholder.jpg --}}
+        
+        <img src="{{ asset('assets-admin/img/illustrations/illustration-signup.jpg') }}" 
+             alt="default-cover"
+             class="border-radius-lg border shadow-sm" 
+             style="width: 50px; height: 50px; object-fit: cover; opacity: 0.8;">
+    @endif
+</td>
 
                   {{-- 3. JUDUL ALBUM --}}
                   <td class="align-middle">

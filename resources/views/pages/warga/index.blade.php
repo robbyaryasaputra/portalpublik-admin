@@ -64,103 +64,111 @@
                     <!-- ^ BATAS AKHIR FORM -->
 
                     <div class="card-body px-0 pb-2">
-    {{-- Alert Success --}}
-    @if (session('success'))
-        <div class="alert alert-success alert-dismissible text-white mx-3 fade show" role="alert">
-            <span class="alert-icon align-middle">
-              <span class="material-icons text-md">thumb_up</span>
-            </span>
-            <span class="alert-text"><strong>Berhasil!</strong> {{ session('success') }}</span>
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-            </button>
-        </div>
-    @endif
-
-    <div class="table-responsive p-0">
-        <table class="table align-items-center mb-0">
-            <thead>
-                <tr>
-                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
-                        No
-                    </th>
-                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
-                        Warga (Foto & Nama)
-                    </th>
-                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">NIK</th>
-                
-
-                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
-                        Jenis Kelamin
-                    </th>
-                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
-                        Pekerjaan
-                    </th>
-                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
-                        Kontak
-                    </th>
-                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
-                        Aksi
-                    </th>
-                </tr>
-            </thead>
-            <tbody>
-                @forelse($wargas as $index => $warga)
-                    <tr>
-                        {{-- NO --}}
-                        <td class="align-middle text-center">
-                            <span class="text-secondary text-xs font-weight-bold">
-                                {{ ($wargas->currentPage() - 1) * $wargas->perPage() + $index + 1 }}
-                            </span>
-                        </td>
-
-                        {{-- FOTO & NAMA (Digabung agar lebih rapi) --}}
-                        <td>
-                            <div class="d-flex px-2 py-1">
-                                <div>
-                                    @if ($warga->avatar)
-                                        <img src="{{ asset('storage/' . $warga->avatar) }}"
-                                            class="avatar avatar-sm me-3 border-radius-lg shadow-sm" alt="user1"
-                                            style="object-fit: cover;">
-                                    @else
-                                        <div class="avatar avatar-sm me-3 border-radius-lg bg-gradient-primary shadow-sm d-flex align-items-center justify-content-center">
-                                            <span class="text-white text-xs fw-bold">{{ substr($warga->nama, 0, 1) }}</span>
-                                        </div>
-                                    @endif
-                                </div>
-                                <div class="d-flex flex-column justify-content-center">
-                                    <h6 class="mb-0 text-sm">{{ $warga->nama }}</h6>
-                                    <p class="text-xs text-secondary mb-0">{{ $warga->email ?? 'Belum ada email' }}</p>
-                                </div>
+                        {{-- Alert Success --}}
+                        @if (session('success'))
+                            <div class="alert alert-success alert-dismissible text-white mx-3 fade show" role="alert">
+                                <span class="alert-icon align-middle">
+                                    <span class="material-icons text-md">thumb_up</span>
+                                </span>
+                                <span class="alert-text"><strong>Berhasil!</strong> {{ session('success') }}</span>
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
                             </div>
-                        </td>
+                        @endif
 
-                        
-                                            <td class="align-middle">
-                                                <span class="text-secondary text-xs font-weight-bold">{{ $warga->no_ktp }}</span>
+                        <div class="table-responsive p-0">
+                            <table class="table align-items-center mb-0">
+                                <thead>
+                                    <tr>
+                                        <th
+                                            class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                                            No
+                                        </th>
+                                        <th
+                                            class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
+                                            Warga (Foto & Nama)
+                                        </th>
+                                        <th
+                                            class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
+                                            NIK</th>
+
+
+                                        <th
+                                            class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                                            Jenis Kelamin
+                                        </th>
+                                        <th
+                                            class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
+                                            Pekerjaan
+                                        </th>
+                                        <th
+                                            class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                                            Kontak
+                                        </th>
+                                        <th
+                                            class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                                            Aksi
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @forelse($wargas as $index => $warga)
+                                        <tr>
+                                            {{-- NO --}}
+                                            <td class="align-middle text-center">
+                                                <span class="text-secondary text-xs font-weight-bold">
+                                                    {{ ($wargas->currentPage() - 1) * $wargas->perPage() + $index + 1 }}
+                                                </span>
+                                            </td>
+
+                                            {{-- FOTO & NAMA --}}
+                                            <td>
+                                                <div class="d-flex px-2 py-1">
+                                                    <div>
+                                                        @if ($warga->avatar)
+                                                            {{-- KONDISI 1: Jika Ada Foto Uploaded --}}
+                                                            <img src="{{ asset('storage/' . $warga->avatar) }}"
+                                                                class="avatar avatar-sm me-3 border-radius-lg shadow-sm"
+                                                                style="object-fit: cover;" alt="foto-warga">
+                                                        @else
+                                                            <img src="{{ asset('assets-admin/img/illustrations/illustration-signup.jpg') }}"
+                                                                class="avatar avatar-sm me-3 border-radius-lg shadow-sm border"
+                                                                style="object-fit: cover; opacity: 0.8;"
+                                                                alt="default-avatar">
+                                                        @endif
+                                                    </div>
+                                                    <div class="d-flex flex-column justify-content-center">
+                                                        <h6 class="mb-0 text-sm">{{ $warga->nama }}</h6>
+                                                        <p class="text-xs text-secondary mb-0">
+                                                            {{ $warga->email ?? 'Belum ada email' }}</p>
+                                                    </div>
+                                                </div>
                                             </td>
 
 
-                        {{-- JENIS KELAMIN (Badge) --}}
-                        <td class="align-middle text-center text-sm">
-                            @if($warga->jenis_kelamin == 'Laki-laki')
-                                <span class="badge badge-sm bg-gradient-info">Laki-laki</span>
-                            @else
-                                <span class="badge badge-sm bg-gradient-success">Perempuan</span>
-                            @endif
-                        </td>
+                                            {{-- JENIS KELAMIN (Badge) --}}
+                                            <td class="align-middle text-center text-sm">
+                                                @if ($warga->jenis_kelamin == 'Laki-laki')
+                                                    <span class="badge badge-sm bg-gradient-info">Laki-laki</span>
+                                                @else
+                                                    <span class="badge badge-sm bg-gradient-success">Perempuan</span>
+                                                @endif
+                                            </td>
 
-                        {{-- PEKERJAAN --}}
-                        <td class="align-middle">
-                            <span class="text-secondary text-xs font-weight-bold">{{ $warga->pekerjaan ?? '-' }}</span>
-                        </td>
+                                            {{-- PEKERJAAN --}}
+                                            <td class="align-middle">
+                                                <span
+                                                    class="text-secondary text-xs font-weight-bold">{{ $warga->pekerjaan ?? '-' }}</span>
+                                            </td>
 
-                        {{-- KONTAK --}}
-                        <td class="align-middle text-center">
-                            <span class="text-secondary text-xs font-weight-bold">{{ $warga->telp ?? '-' }}</span>
-                        </td>
-                        
-                                                {{-- 5. AKSI (STYLE BARU SESUAI PERMINTAAN) --}}
+                                            {{-- KONTAK --}}
+                                            <td class="align-middle text-center">
+                                                <span
+                                                    class="text-secondary text-xs font-weight-bold">{{ $warga->telp ?? '-' }}</span>
+                                            </td>
+
+                                            {{-- 5. AKSI (STYLE BARU SESUAI PERMINTAAN) --}}
                                             <td class="text-center align-middle">
                                                 <div class="d-flex justify-content-center gap-2">
 
@@ -177,8 +185,8 @@
                                                     </a>
 
                                                     {{-- Tombol Hapus (Merah / Danger) --}}
-                                                    <form action="{{ route('warga.destroy', $warga) }}"
-                                                        method="POST" style="display:inline"
+                                                    <form action="{{ route('warga.destroy', $warga) }}" method="POST"
+                                                        style="display:inline"
                                                         onsubmit="return confirm('Yakin ingin menghapus data profil desa ini?')">
                                                         @csrf
                                                         @method('DELETE')

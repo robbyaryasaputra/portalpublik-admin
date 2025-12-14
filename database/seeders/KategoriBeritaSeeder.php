@@ -2,11 +2,9 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use App\Models\KategoriBerita;
 use Illuminate\Support\Str;
-// Import Faker
 use Faker\Factory as Faker;
 
 class KategoriBeritaSeeder extends Seeder
@@ -18,21 +16,52 @@ class KategoriBeritaSeeder extends Seeder
      */
     public function run()
     {
-        // Inisialisasi Faker
-        // Kita gunakan 'id_ID' agar datanya terdengar Indonesia
         $faker = Faker::create('id_ID');
 
-        // Buat 10 Kategori Berita
-        foreach (range(1, 100) as $index) {
-            // Buat nama yang unik (misal: "Berita Olahraga", "Info Keuangan")
-            // 'words(3, true)' = 3 kata, dikembalikan sebagai string
-            $nama = 'Berita ' . $faker->unique()->words(2, true);
+        // 1. Daftar Topik Berita (Agar tidak Lorem Ipsum)
+        $topik = [
+            'Politik', 'Ekonomi', 'Olahraga', 'Teknologi', 'Hiburan', 
+            'Otomotif', 'Kesehatan', 'Kuliner', 'Wisata', 'Edukasi',
+            'Hukum', 'Kriminal', 'Properti', 'Sains', 'Lingkungan',
+            'Sejarah', 'Budaya', 'Karir', 'Finansial', 'Parenting'
+        ];
 
-            KategoriBerita::create([
-                'nama'      => $nama,
-                'slug'      => Str::slug($nama),
-                'deskripsi' => $faker->sentence(10) // Buat deskripsi acak 10 kata
-            ]);
+        // 2. Jenis/Cakupan Berita (Untuk variasi agar bisa mencapai 100 data unik)
+        $cakupan = [
+            'Nasional', 'Internasional', 'Regional', 'Terkini', 'Populer', 
+            'Pilihan', 'Investigasi', 'Viral', 'Eksklusif', 'Akhir Pekan',
+            'Utama', 'Sore', 'Pagi', 'Mendalam', 'Opini'
+        ];
+
+        // 3. Template Deskripsi
+        $templateDeskripsi = [
+            'Menyajikan informasi terbaru dan terpercaya seputar dunia',
+            'Kumpulan berita pilihan yang sedang hangat diperbincangkan mengenai',
+            'Ulasan mendalam dan analisis tajam terkait isu',
+            'Update harian untuk menambah wawasan Anda di bidang'
+        ];
+
+        // Kita akan mencoba membuat kombinasi unik
+        // Karena kita butuh 100, kita harus pastikan kombinasinya cukup
+        $count = 0;
+        
+        // Loop ini akan terus berjalan sampai kita mendapatkan 100 data unik
+        // atau sampai kombinasi habis.
+        foreach ($topik as $t) {
+            foreach ($cakupan as $c) {
+                if ($count >= 100) break 2; // Stop jika sudah 100 data
+
+                $namaKategori = "$t $c"; // Contoh: "Politik Nasional", "Teknologi Terkini"
+
+                KategoriBerita::create([
+                    'nama'      => $namaKategori,
+                    'slug'      => Str::slug($namaKategori),
+                    // Deskripsi: "Menyajikan informasi... seputar Politik Nasional."
+                    'deskripsi' => $faker->randomElement($templateDeskripsi) . ' ' . $namaKategori . '.',
+                ]);
+
+                $count++;
+            }
         }
     }
 }

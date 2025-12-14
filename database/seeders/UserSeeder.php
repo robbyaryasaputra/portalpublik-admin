@@ -24,7 +24,8 @@ class UserSeeder extends Seeder
             User::create([
                 'name' => $faker->name(),
                 'email' => $faker->unique()->safeEmail(),
-                'password' => 'password123', // Semua password sama, akan di-hash
+                'password' => 'password123',
+                'role' => 'admin', // Semua password sama, akan di-hash
             ]);
         }
     }

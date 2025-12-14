@@ -108,36 +108,21 @@
                                             </td>
 
                                             {{-- 2. TAMPILAN GAMBAR KOTAK --}}
-                                            <td class="text-center">
-                                                @if ($item->cover)
-                                                    <img src="{{ asset('storage/' . $item->cover) }}" alt="cover"
-                                                        class="border-radius-lg border"
-                                                        style="width: 50px; height: 50px; object-fit: cover;">
-                                                @else
-                                                    @php
-                                                        $words = explode(' ', $item->judul);
-                                                        $initials = '';
-                                                        foreach ($words as $key => $word) {
-                                                            if ($key < 2) {
-                                                                $initials .= strtoupper(substr($word, 0, 1));
-                                                            }
-                                                        }
-                                                        $colors = [
-                                                            'bg-gradient-primary',
-                                                            'bg-gradient-success',
-                                                            'bg-gradient-info',
-                                                            'bg-gradient-danger',
-                                                            'bg-gradient-warning',
-                                                            'bg-gradient-dark',
-                                                        ];
-                                                        $randomColor = $colors[$item->berita_id % count($colors)];
-                                                    @endphp
-                                                    <div class="border-radius-lg {{ $randomColor }} d-flex justify-content-center align-items-center mx-auto text-white fw-bold shadow-sm"
-                                                        style="width: 50px; height: 50px;">
-                                                        {{ $initials }}
-                                                    </div>
-                                                @endif
-                                            </td>
+<td class="text-center">
+    @if ($item->cover)
+        {{-- KONDISI 1: Jika Ada Cover Uploaded --}}
+        <img src="{{ asset('storage/' . $item->cover) }}" alt="cover"
+            class="border-radius-lg border shadow-sm"
+            style="width: 50px; height: 50px; object-fit: cover;">
+    @else
+        {{-- KONDISI 2: Jika TIDAK Ada Cover (Tampilkan Placeholder) --}}
+        {{-- Pastikan file gambar tersedia di: public/assets/img/news-placeholder.jpg --}}
+        
+        <img src="{{ asset('assets-admin/img/illustrations/illustration-signup.jpg') }}" alt="default-cover"
+            class="border-radius-lg border shadow-sm"
+            style="width: 50px; height: 50px; object-fit: cover; opacity: 0.8;">
+    @endif
+</td>
 
                                             <td>
                                                 <h6 class="mb-0 text-sm text-wrap" style="max-width: 250px;">

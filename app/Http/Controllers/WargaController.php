@@ -20,7 +20,7 @@ class WargaController extends Controller
         $wargas = Warga::filter($request, $filterableColumns)
                         ->search($request, $searchableColumns)
                         ->orderBy('created_at', 'desc')
-                        ->paginate(20)
+                        ->paginate(30)
                         ->withQueryString();
 
         return view('pages.warga.index', compact('wargas'));

@@ -53,16 +53,16 @@
       <div class="col-lg-6 mb-lg-0 mb-4">
         <div class="copyright text-center text-sm text-muted text-lg-start">
           © <script>document.write(new Date().getFullYear())</script>,
-          made with <i class="fa fa-heart"></i> by Creative Tim
+          made with <i class="fa fa-heart"></i> by Portal Publik
         </div>
       </div>
       <div class="col-lg-6">
         <ul class="nav nav-footer justify-content-center justify-content-lg-end">
           <li class="nav-item">
-            <a href="#" class="nav-link text-muted">Company</a>
+            <a href="#" class="nav-link text-muted">ROBBY ARYA S</a>
           </li>
           <li class="nav-item">
-            <a href="#" class="nav-link text-muted">About Us</a>
+            <a href="#" class="nav-link text-muted">Bina Desa</a>
           </li>
         </ul>
       </div>

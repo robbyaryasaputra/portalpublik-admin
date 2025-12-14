@@ -16,7 +16,7 @@ class KategoriBeritaController extends Controller
         $items = KategoriBerita::filter($request, $filterableColumns) // <-- Tambahkan ini
                              ->search($request, $searchableColumns) // <-- Tambahkan ini
                              ->orderBy('kategori_id', 'desc')
-                             ->paginate(15)
+                             ->paginate(30)
                              ->withQueryString(); // <-- Tambahkan ini (PENTING)
 
         return view('pages.kategori-berita.index', compact('items'));

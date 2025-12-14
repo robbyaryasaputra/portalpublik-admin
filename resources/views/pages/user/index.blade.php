@@ -69,8 +69,9 @@
                                         <th
                                             class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
                                             Email</th>
-                                            {{-- TAMBAHAN: HEADER ROLE --}}
-                                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
+                                        {{-- TAMBAHAN: HEADER ROLE --}}
+                                        <th
+                                            class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
                                             Role</th>
                                         <th
                                             class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
@@ -85,17 +86,16 @@
                                                 {{ ($items->currentPage() - 1) * $items->perPage() + $index + 1 }}
                                             </td>
 
-                                            {{-- TAMPILKAN FOTO --}}
+                                            {{-- TAMPILAN FOTO USER --}}
                                             <td>
                                                 @if ($item->avatar)
                                                     <img src="{{ asset('storage/' . $item->avatar) }}"
-                                                        class="avatar avatar-sm rounded-circle me-2" alt="user1">
+                                                        class="avatar avatar-sm rounded-circle me-2 border"
+                                                        style="object-fit: cover;" alt="user-avatar">
                                                 @else
-                                                    <div
-                                                        class="avatar avatar-sm rounded-circle bg-gradient-secondary d-flex align-items-center justify-content-center">
-                                                        <span
-                                                            class="text-white text-xs">{{ substr($item->name, 0, 1) }}</span>
-                                                    </div>
+                                                    <img src="{{ asset('assets-admin/img/illustrations/illustration-signup.jpg') }}"
+                                                        class="avatar avatar-sm rounded-circle me-2 border shadow-sm"
+                                                        style="object-fit: cover; opacity: 0.8;" alt="default-avatar">
                                                 @endif
                                             </td>
 
@@ -108,7 +108,7 @@
                                                     <span class="badge badge-sm bg-gradient-secondary">Guest</span>
                                                 @endif
                                             </td>
-                                            
+
 
                                             {{-- 5. AKSI (STYLE BARU SESUAI PERMINTAAN) --}}
                                             <td class="text-center align-middle">
@@ -127,8 +127,8 @@
                                                     </a>
 
                                                     {{-- Tombol Hapus (Merah / Danger) --}}
-                                                    <form action="{{ route('user.destroy', $item->id) }}"
-                                                        method="POST" style="display:inline"
+                                                    <form action="{{ route('user.destroy', $item->id) }}" method="POST"
+                                                        style="display:inline"
                                                         onsubmit="return confirm('Yakin ingin menghapus data profil desa ini?')">
                                                         @csrf
                                                         @method('DELETE')

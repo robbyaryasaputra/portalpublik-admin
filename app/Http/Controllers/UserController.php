@@ -4,8 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use App\Models\Media;
-use Illuminate\Http\Request; // <-- Pastikan ini ada
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 
 class UserController extends Controller
 {
@@ -23,7 +24,7 @@ class UserController extends Controller
         $items = User::filter($request, $filterableColumns)
                      ->search($request, $searchableColumns)
                      ->orderBy('id', 'desc')
-                     ->paginate(15)
+                     ->paginate(30)
                      ->withQueryString(); // <-- PENTING
 
         return view('pages.user.index', compact('items'));
@@ -131,7 +132,8 @@ class UserController extends Controller
     // Hapus user
     public function destroy(User $user)
     {
-        // Hapus foto profil sebelum hapus user
+        
+        $user->load('media');
         foreach ($user->media as $media) {
             if (Storage::disk('public')->exists($media->file_url)) {
                 Storage::disk('public')->delete($media->file_url);

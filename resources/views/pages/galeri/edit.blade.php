@@ -56,12 +56,6 @@
                                                     class="img-thumbnail w-100 shadow-sm rounded"
                                                     style="height: 120px; object-fit: cover;" alt="Foto Galeri">
                                             </a>
-                                            {{-- Opsional: Jika Anda nanti ingin menambahkan fitur hapus per foto --}}
-                                            {{-- 
-                            <button type="button" class="btn btn-danger btn-sm p-1 position-absolute top-0 end-0 mt-1 me-1" title="Hapus Foto">
-                                <i class="material-icons text-white" style="font-size: 16px;">close</i>
-                            </button> 
-                            --}}
                                         </div>
                                     </div>
                                 @endforeach

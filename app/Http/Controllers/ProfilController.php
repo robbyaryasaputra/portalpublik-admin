@@ -20,7 +20,7 @@ class ProfilController extends Controller
                             return $q->where('provinsi', $request->provinsi);
                         })
                         ->orderBy('created_at', 'desc')
-                        ->paginate(20)
+                        ->paginate(30)
                         ->withQueryString();
 
         return view('pages.profil.index', compact('profils', 'provinsi'));

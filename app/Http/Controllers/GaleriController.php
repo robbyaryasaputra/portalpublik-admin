@@ -23,7 +23,7 @@ class GaleriController extends Controller
             ->withCount('photos') // Menghitung jumlah foto tanpa meload semua data (Cepat)
             ->with('photos')      // Eager load untuk mengambil sampul
             ->orderBy('created_at', 'desc')
-            ->paginate(20)
+            ->paginate(30)
             ->withQueryString();
 
         return view('pages.galeri.index', compact('galeris'));
