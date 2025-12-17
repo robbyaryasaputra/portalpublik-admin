@@ -169,4 +169,27 @@
       font-style: italic;
     }
     /* == AKHIR CSS YANG DIPINDAHKAN == */
+  /* detail berita */
+  .img-hover-zoom:hover {
+        transform: scale(1.1); /* Gambar membesar 10% */
+        filter: brightness(0.8); /* Gambar agak gelap sedikit agar efeknya terasa */
+        cursor: pointer;
+    }
+
+    /* Memastikan link pembungkus memotong gambar yang membesar */
+    .overflow-hidden {
+        overflow: hidden !important;
+    }
+    
+    .hover-zoom:hover {
+        transform: scale(1.03); /* Zoom halus 3% */
+        filter: brightness(0.9); /* Sedikit menggelap agar kontras */
+        cursor: pointer;
+    }
+    
+    /* Mencegah gambar keluar dari border radius saat membesar */
+    .overflow-hidden {
+        overflow: hidden !important;
+    }
+
   </style>

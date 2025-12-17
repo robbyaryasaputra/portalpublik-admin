@@ -17,7 +17,7 @@ class UserController extends Controller
     public function index(Request $request) // Tambahkan Request $request
     {
         // Tentukan kolom
-        $filterableColumns = []; // Tidak ada filter dropdown untuk User saat ini
+        $filterableColumns = ['role']; // Tidak ada filter dropdown untuk User saat ini
         $searchableColumns = ['name', 'email']; // Kolom yang ingin dicari
 
         // Terapkan scope, paginate, dan withQueryString

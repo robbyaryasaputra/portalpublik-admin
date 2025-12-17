@@ -343,7 +343,7 @@
             <p class="project-title">Portal Publik</p>
 
             <p>
-                <strong>Project Bina Desa</strong>
+                <strong></strong>
                 <br><br>
                 Platform terintegrasi untuk digitalisasi layanan dan administrasi kependudukan di wilayah Anda.
             </p>

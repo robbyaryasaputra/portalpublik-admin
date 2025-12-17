@@ -67,21 +67,22 @@ class User extends Authenticatable
     /**
      * Scope: Filter berdasarkan kolom yang dapat difilter
      */
-    public function scopeFilter(Builder $query, $request, array $filterableColumns = []): Builder
-    {
-        if (!$request) {
-            return $query;
-        }
+    // File: App\Models\User.php
 
-        foreach ($filterableColumns as $column) {
-            // Gunakan $request->filled() untuk memastikan nilai tidak kosong
-            if ($request->filled($column)) {
-                $value = $request->input($column);
-                $query->where($column, $value);
-            }
-        }
+public function scopeFilter(Builder $query, $request, array $filterableColumns = []): Builder
+{
+    if (!$request) {
         return $query;
     }
+
+    foreach ($filterableColumns as $column) {
+        if ($request->filled($column)) {
+            $value = $request->input($column);
+            $query->where($column, $value);
+        }
+    }
+    return $query;
+}
 
     
      // Scope: Search berdasarkan kolom yang dapat dicari

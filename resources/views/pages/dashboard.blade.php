@@ -547,8 +547,9 @@
                         </div>
                         <div class="card-body">
                             <div class="d-flex flex-column align-items-center text-center">
-                                <img src="{{ asset('assets-admin/img/team-4.jpg') }}" alt="Admin"
-                                    class="rounded-circle p-1 bg-gradient-primary" width="110">
+                                <img src="{{ asset('assets-admin/img/logos/robby.jpg') }}" alt="Admin" 
+                                class="rounded-circle p-1 bg-gradient-primary" 
+                                style="width: 110px; height: 110px; object-fit: cover; display: block;">
 
                                 <div class="mt-3">
                                     <h4>Robby Arya Saputra</h4>

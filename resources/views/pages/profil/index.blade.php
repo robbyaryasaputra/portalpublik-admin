@@ -51,7 +51,7 @@
                                     </button>
                                     @if (request('search') || request('provinsi'))
                                         <a href="{{ route('profil.index') }}" class="btn btn-secondary mb-0">
-                                            Reset
+                                            <i class="material-icons text-sm me-1">restart_alt</i>Reset
                                         </a>
                                     @endif
                                 </div>
@@ -98,31 +98,31 @@
                                             </td>
 
                                             {{-- 2. LOGO & NAMA DESA --}}
-<td>
-    <div class="d-flex px-2 py-1">
-        <div>
-            @if ($item->logo)
-                {{-- KONDISI 1: Jika Ada Logo Uploaded --}}
-                <img src="{{ asset('storage/' . $item->logo) }}"
-                    class="avatar avatar-sm me-3 border-radius-lg border"
-                    style="object-fit: cover; background: #fff;" 
-                    alt="logo">
-            @else
-                {{-- KONDISI 2: Jika TIDAK Ada Logo (Tampilkan Placeholder) --}}
-                {{-- Pastikan file gambar tersedia di: public/assets/img/logo-placeholder.jpg --}}
-                
-                <img src="{{ asset('assets-admin/img/illustrations/illustration-signup.jpg') }}" 
-                    class="avatar avatar-sm me-3 border-radius-lg border shadow-sm"
-                    style="object-fit: cover; opacity: 0.8; background: #f0f2f5;" 
-                    alt="default-logo">
-            @endif
-        </div>
-        <div class="d-flex flex-column justify-content-center">
-            <h6 class="mb-0 text-sm">{{ $item->nama_desa }}</h6>
-            <p class="text-xs text-secondary mb-0">ID: {{ $item->profil_id }}</p>
-        </div>
-    </div>
-</td>
+                                            <td>
+                                                <div class="d-flex px-2 py-1">
+                                                    <div>
+                                                        @if ($item->logo)
+                                                            {{-- KONDISI 1: Jika Ada Logo Uploaded --}}
+                                                            <img src="{{ asset('storage/' . $item->logo) }}"
+                                                                class="avatar avatar-sm me-3 border-radius-lg border"
+                                                                style="object-fit: cover; background: #fff;" alt="logo">
+                                                        @else
+                                                            {{-- KONDISI 2: Jika TIDAK Ada Logo (Tampilkan Placeholder) --}}
+                                                            {{-- Pastikan file gambar tersedia di: public/assets/img/logo-placeholder.jpg --}}
+
+                                                            <img src="{{ asset('assets-admin/img/logos/networking.png') }}"
+                                                                class="avatar avatar-sm me-3 border-radius-lg border shadow-sm"
+                                                                style="object-fit: cover; opacity: 0.8; background: #f0f2f5;"
+                                                                alt="default-logo">
+                                                        @endif
+                                                    </div>
+                                                    <div class="d-flex flex-column justify-content-center">
+                                                        <h6 class="mb-0 text-sm">{{ $item->nama_desa }}</h6>
+                                                        <p class="text-xs text-secondary mb-0">ID: {{ $item->profil_id }}
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                            </td>
 
                                             {{-- 3. LOKASI --}}
                                             <td class="align-middle">

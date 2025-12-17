@@ -38,7 +38,7 @@
                                     </button>
                                     @if (request('search'))
                                         <a href="{{ route('kategori-berita.index') }}" class="btn btn-secondary">
-                                            Reset
+                                            <i class="material-icons text-sm me-1">restart_alt</i>Reset
                                         </a>
                                     @endif
                                 </div>
@@ -52,52 +52,78 @@
                         @if (session('success'))
                             <div class="alert alert-success">{{ session('success') }}</div>
                         @endif
-
-                        <div class="table-responsive">
+                        <div class="table-responsive p-0">
                             <table class="table align-items-center mb-0">
                                 <thead>
                                     <tr>
-                                        <th class="text-center">NO</th>
-                                        <th>Nama</th>
-                                        <th>Slug</th>
-                                        <th>Deskripsi</th>
-                                        <th class="text-center">Aksi</th>
+                                        <th
+                                            class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 text-center">
+                                            NO</th>
+                                        <th
+                                            class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
+                                            Identitas Kategori</th>
+                                        <th
+                                            class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
+                                            Slug</th>
+                                        <th
+                                            class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
+                                            Deskripsi Singkat</th>
+                                        <th
+                                            class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 text-center">
+                                            Aksi</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     @forelse($items as $index => $item)
                                         <tr>
                                             <td class="text-center">
-                                                {{ ($items->currentPage() - 1) * $items->perPage() + $index + 1 }}
+                                                <span class="text-secondary text-xs font-weight-bold">
+                                                    {{ ($items->currentPage() - 1) * $items->perPage() + $index + 1 }}
+                                                </span>
                                             </td>
-                                            <td>{{ $item->nama }}</td>
-                                            <td>{{ $item->slug }}</td>
-                                            <td>{{ \Illuminate\Support\Str::limit($item->deskripsi, 80) }}</td>
-                                                                     {{-- 5. AKSI (STYLE BARU SESUAI PERMINTAAN) --}}
-                                            <td class="text-center align-middle">
-                                                <div class="d-flex justify-content-center gap-2">
-
-                                                    {{-- Tombol Detail (Hitam / Dark) --}}
+                                            <td>
+                                                <div class="d-flex px-2 py-1">
+                                                    <div class="d-flex flex-column justify-content-center">
+                                                        <h6 class="mb-0 text-sm">{{ $item->nama }}</h6>
+                                                        <p class="text-xs text-secondary mb-0">ID: {{ $item->kategori_id }}
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <p class="text-xs font-weight-bold mb-0">{{ $item->slug }}</p>
+                                            </td>
+                                            <td>
+                                                <span
+                                                    class="text-xs text-secondary">{{ \Illuminate\Support\Str::limit($item->deskripsi, 50) }}</span>
+                                            </td>
+                                            <td class="align-middle text-center">
+                                                <div class="d-flex justify-content-center align-items-center gap-2">
+                                                    {{-- Tombol Detail --}}
                                                     <a href="{{ route('kategori-berita.show', $item->kategori_id) }}"
-                                                        class="btn btn-sm btn-outline-dark mb-0 px-3" title="Lihat Detail">
-                                                        <i class="material-icons text-sm me-1">visibility</i> Detail
+                                                        class="btn btn-sm btn-outline-dark mb-0 px-3 border-radius-pill"
+                                                        title="Lihat Detail">
+                                                        <i class="material-icons text-xs me-1">visibility</i> Detail
                                                     </a>
 
-                                                    {{-- Tombol Edit (Cyan / Info) --}}
+                                                    {{-- Tombol Edit --}}
                                                     <a href="{{ route('kategori-berita.edit', $item->kategori_id) }}"
-                                                        class="btn btn-sm btn-outline-info mb-0 px-3" title="Edit Data">
-                                                        <i class="material-icons text-sm me-1">edit</i> Edit
+                                                        class="btn btn-sm btn-outline-info mb-0 px-3 border-radius-pill"
+                                                        title="Edit Data">
+                                                        <i class="material-icons text-xs me-1">edit</i> Edit
                                                     </a>
 
-                                                    {{-- Tombol Hapus (Merah / Danger) --}}
-                                                    <form action="{{ route('kategori-berita.destroy', $item->kategori_id) }}"
-                                                        method="POST" style="display:inline"
+                                                    {{-- Tombol Hapus --}}
+                                                    <form
+                                                        action="{{ route('kategori-berita.destroy', $item->kategori_id) }}"
+                                                        method="POST" class="d-inline"
                                                         onsubmit="return confirm('Yakin ingin menghapus data kategori berita ini?')">
                                                         @csrf
                                                         @method('DELETE')
-                                                        <button class="btn btn-sm btn-outline-danger mb-0 px-3"
+                                                        <button type="submit"
+                                                            class="btn btn-sm btn-outline-danger mb-0 px-3 border-radius-pill"
                                                             title="Hapus Permanen">
-                                                            <i class="material-icons text-sm me-1">delete</i> Hapus
+                                                            <i class="material-icons text-xs me-1">delete</i> Hapus
                                                         </button>
                                                     </form>
                                                 </div>
@@ -105,7 +131,9 @@
                                         </tr>
                                     @empty
                                         <tr>
-                                            <td colspan="5" class="text-center">Belum ada kategori.</td>
+                                            <td colspan="5" class="text-center py-4">
+                                                <span class="text-xs text-secondary">Belum ada data kategori.</span>
+                                            </td>
                                         </tr>
                                     @endforelse
                                 </tbody>

@@ -60,7 +60,7 @@
                                     </button>
                                     @if (request('search') || request('kategori_id') || request('status'))
                                         <a href="{{ route('berita.index') }}" class="btn btn-secondary">
-                                            Reset
+                                           <i class="material-icons text-sm me-1">restart_alt</i> Reset
                                         </a>
                                     @endif
                                 </div>
@@ -108,21 +108,21 @@
                                             </td>
 
                                             {{-- 2. TAMPILAN GAMBAR KOTAK --}}
-<td class="text-center">
-    @if ($item->cover)
-        {{-- KONDISI 1: Jika Ada Cover Uploaded --}}
-        <img src="{{ asset('storage/' . $item->cover) }}" alt="cover"
-            class="border-radius-lg border shadow-sm"
-            style="width: 50px; height: 50px; object-fit: cover;">
-    @else
-        {{-- KONDISI 2: Jika TIDAK Ada Cover (Tampilkan Placeholder) --}}
-        {{-- Pastikan file gambar tersedia di: public/assets/img/news-placeholder.jpg --}}
-        
-        <img src="{{ asset('assets-admin/img/illustrations/illustration-signup.jpg') }}" alt="default-cover"
-            class="border-radius-lg border shadow-sm"
-            style="width: 50px; height: 50px; object-fit: cover; opacity: 0.8;">
-    @endif
-</td>
+                                            <td class="text-center">
+                                                @if ($item->cover)
+                                                    {{-- KONDISI 1: Jika Ada Cover Uploaded --}}
+                                                    <img src="{{ asset('storage/' . $item->cover) }}" alt="cover"
+                                                        class="border-radius-lg border shadow-sm"
+                                                        style="width: 50px; height: 50px; object-fit: cover;">
+                                                @else
+                                                    {{-- KONDISI 2: Jika TIDAK Ada Cover (Tampilkan Placeholder) --}}
+                                                    {{-- Pastikan file gambar tersedia di: public/assets/img/news-placeholder.jpg --}}
+
+                                                    <img src="{{ asset('assets-admin/img/logos/list.png') }}"
+                                                        alt="default-cover" class="border-radius-lg border shadow-sm"
+                                                        style="width: 50px; height: 50px; object-fit: cover; opacity: 0.8;">
+                                                @endif
+                                            </td>
 
                                             <td>
                                                 <h6 class="mb-0 text-sm text-wrap" style="max-width: 250px;">

@@ -50,7 +50,7 @@
                                     </button>
                                     @if (request('search') || request('filter_penyelenggara'))
                                         <a href="{{ route('agenda.index') }}" class="btn btn-secondary">
-                                            Reset
+                                            <i class="material-icons text-sm me-1">restart_alt</i>Reset
                                         </a>
                                     @endif
                                 </div>
@@ -109,8 +109,8 @@
                                                             style="width: 50px; height: 50px; object-fit: cover;">
                                                     </a>
                                                 @else
-                                                    <a href="{{ asset('assets-admin/img/illustrations/illustration-signup.jpg') }}" target="_blank">
-                                                        <img src="{{ asset('assets-admin/img/illustrations/illustration-signup.jpg') }}"
+                                                    <a href="{{ asset('assets-admin/img/logos/agenda.png') }}" target="_blank">
+                                                        <img src="{{ asset('assets-admin/img/logos/agenda.png') }}"
                                                             alt="default-poster" class="border-radius-lg border shadow-sm"
                                                             style="width: 50px; height: 50px; object-fit: cover; opacity: 0.8;">
                                                     </a>

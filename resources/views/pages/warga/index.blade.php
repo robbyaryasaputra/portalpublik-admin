@@ -54,7 +54,7 @@
                                     </button>
                                     @if (request('search') || request('jenis_kelamin'))
                                         <a href="{{ route('warga.index') }}" class="btn btn-secondary">
-                                            Reset
+                                            <i class="material-icons text-sm me-1">restart_alt</i>Reset
                                         </a>
                                     @endif
                                 </div>
@@ -132,7 +132,7 @@
                                                                 class="avatar avatar-sm me-3 border-radius-lg shadow-sm"
                                                                 style="object-fit: cover;" alt="foto-warga">
                                                         @else
-                                                            <img src="{{ asset('assets-admin/img/illustrations/illustration-signup.jpg') }}"
+                                                            <img src="{{ asset('assets-admin/img/logos/group.png') }}"
                                                                 class="avatar avatar-sm me-3 border-radius-lg shadow-sm border"
                                                                 style="object-fit: cover; opacity: 0.8;"
                                                                 alt="default-avatar">
