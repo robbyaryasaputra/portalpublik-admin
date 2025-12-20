@@ -6,7 +6,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\WargaController;
 use App\Http\Controllers\AgendaController;
 use App\Http\Controllers\BeritaController;
-use App\Http\Controllers\GaleriController;
+use App\Http\Controllers\GaleriController;   
 use App\Http\Controllers\ProfilController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\KategoriBeritaController;

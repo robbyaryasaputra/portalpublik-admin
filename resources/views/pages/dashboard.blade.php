@@ -554,10 +554,9 @@
                                 <div class="mt-3">
                                     <h4>Robby Arya Saputra</h4>
                                     <p class="text-secondary mb-1">NIM: 2357301119</p>
-                                    <p class="text-muted font-size-sm">S1 Sistem Informasi - politeknik Caltex Riau</p>
+                                    <p class="text-muted font-size-sm">D4 Sistem Informasi - politeknik Caltex Riau</p>
 
-                                    <button class="btn btn-primary">Follow</button>
-                                    <button class="btn btn-outline-primary">Message</button>
+                                    
                                 </div>
 
                                 <div class="mt-3 w-100 text-center">

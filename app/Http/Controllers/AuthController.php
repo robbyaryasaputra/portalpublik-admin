@@ -8,16 +8,13 @@ use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
 {
-    // Tampilkan halaman login
     public function index()
     {
         return view('pages.login.login-form');
     }
 
-    // Proses login
     public function login(Request $request)
     {
-        // Validasi input. Form saat ini menggunakan field 'username' — kita anggap sebagai email.
         $request->validate([
             'username' => 'required|email',
             'password' => 'required|string',
@@ -32,12 +29,12 @@ class AuthController extends Controller
             'password' => $request->password,
         ];
 
-        
+
         if (Auth::attempt($credentials)) {
         $request->session()->regenerate();
 
-        session(['last_login' => now()->setTimezone('Asia/Jakarta')->format('d M Y, H:i')]);
-     
+        session (['last_login' => now()->setTimezone('Asia/Jakarta')->format('d M Y, H:i')]);
+
 
         return redirect()->intended(route('dashboard.index'));
     }

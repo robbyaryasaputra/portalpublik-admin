@@ -19,7 +19,7 @@ class CreateFirstUser extends Seeder
             'email' => 'robby@gmail.com',
             'password' => Hash::make('12345678'),
             'role' => 'admin',
-        ]); // Ganti dengan password yang diinginkan
+        ]); 
     }
 }
 
