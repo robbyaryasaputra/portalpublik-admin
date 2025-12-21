@@ -13,14 +13,14 @@ class Berita extends Model
 
     protected $table = 'beritas';
     protected $primaryKey = 'berita_id';
-    
+
     protected $fillable = [
-        'kategori_id', 
-        'judul', 
-        'slug', 
-        'isi_html', 
-        'penulis', 
-        'status', 
+        'kategori_id',
+        'judul',
+        'slug',
+        'isi_html',
+        'penulis',
+        'status',
         'terbit_at',
     ];
 
@@ -55,10 +55,6 @@ class Berita extends Model
         return $m ? $m->file_url : null;
     }
 
-    /**
-     * Accessor: Ambil Banyak Foto untuk GALERI
-     * Logika: Cari media dengan caption 'gallery'
-     */
     public function getGalleryAttribute()
     {
         return $this->media()->where('caption', 'gallery')->get();

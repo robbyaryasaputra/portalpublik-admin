@@ -20,8 +20,8 @@ class GaleriController extends Controller
             ->when($search, function ($query, $search) {
                 return $query->where('judul', 'like', "%{$search}%");
             })
-            ->withCount('photos') // Menghitung jumlah foto tanpa meload semua data (Cepat)
-            ->with('photos')      // Eager load untuk mengambil sampul
+            ->withCount('photos') 
+            ->with('photos')
             ->orderBy('created_at', 'desc')
             ->paginate(30)
             ->withQueryString();
@@ -58,7 +58,7 @@ class GaleriController extends Controller
         if ($request->hasFile('photos')) {
             foreach ($request->file('photos') as $photo) {
                 $path = $photo->store('uploads/galeri', 'public');
-                
+
                 Media::create([
                     'ref_table' => 'galeris', // Penanda tabel
                     'ref_id'    => $galeri->galeri_id,
@@ -110,7 +110,7 @@ class GaleriController extends Controller
         if ($request->hasFile('photos')) {
             foreach ($request->file('photos') as $photo) {
                 $path = $photo->store('uploads/galeri', 'public');
-                
+
                 Media::create([
                     'ref_table' => 'galeris',
                     'ref_id'    => $galeri->galeri_id,

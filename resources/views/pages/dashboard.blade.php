@@ -262,7 +262,7 @@
 
 
 
-            
+
 
             <div class="row mt-4">
                 <div class="col-12">
@@ -284,7 +284,8 @@
                                                     <div class="numbers">
                                                         <p class="text-sm mb-0 text-capitalize font-weight-bold text-white">Ukuran Database</p>
                                                         <h5 class="font-weight-bolder mb-0 text-white">
-                                                            {{ number_format(\DB::select('SELECT ROUND(SUM(data_length + index_length) / 1024 / 1024, 2) AS size_mb FROM information_schema.tables WHERE table_schema = DATABASE()')[0]->size_mb ?? 0, 2) }} MB
+                                                            {{ number_format(\DB::select('SELECT ROUND(SUM(data_length + index_length) / 1024 / 1024, 2)
+                                                             AS size_mb FROM information_schema.tables WHERE table_schema = DATABASE()')[0]->size_mb ?? 0, 2) }} MB
                                                         </h5>
                                                     </div>
                                                 </div>
@@ -547,8 +548,8 @@
                         </div>
                         <div class="card-body">
                             <div class="d-flex flex-column align-items-center text-center">
-                                <img src="{{ asset('assets-admin/img/logos/robby.jpg') }}" alt="Admin" 
-                                class="rounded-circle p-1 bg-gradient-primary" 
+                                <img src="{{ asset('assets-admin/img/logos/robby.jpg') }}" alt="Admin"
+                                class="rounded-circle p-1 bg-gradient-primary"
                                 style="width: 110px; height: 110px; object-fit: cover; display: block;">
 
                                 <div class="mt-3">
@@ -556,7 +557,7 @@
                                     <p class="text-secondary mb-1">NIM: 2357301119</p>
                                     <p class="text-muted font-size-sm">D4 Sistem Informasi - politeknik Caltex Riau</p>
 
-                                    
+
                                 </div>
 
                                 <div class="mt-3 w-100 text-center">

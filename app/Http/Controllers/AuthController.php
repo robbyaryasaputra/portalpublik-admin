@@ -44,9 +44,9 @@ class AuthController extends Controller
 
     public function logout(Request $request)
     {
-        Auth::logout(); // Log out user
-        $request->session()->invalidate(); // Invalidasi session
-        $request->session()->regenerateToken(); // Regenerate CSRF token untuk keamanan
-        return redirect()->route('login.form'); // Arahkan kembali ke halaman login
+        Auth::logout(); 
+        $request->session()->invalidate(); 
+        $request->session()->regenerateToken(); 
+        return redirect()->route('login.form'); 
     }
 }

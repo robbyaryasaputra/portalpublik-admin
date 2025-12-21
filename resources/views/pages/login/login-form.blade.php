@@ -339,15 +339,12 @@
 
         <div class="login-overlay-panel">
             <h2>Selamat Datang</h2>
-
             <p class="project-title">Portal Publik</p>
-
             <p>
                 <strong></strong>
                 <br><br>
                 Platform terintegrasi untuk digitalisasi layanan dan administrasi kependudukan di wilayah Anda.
             </p>
-
         </div>
 
     </div>

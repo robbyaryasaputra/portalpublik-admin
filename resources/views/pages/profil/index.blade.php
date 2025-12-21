@@ -157,19 +157,16 @@
                                             <td class="text-center align-middle">
                                                 <div class="d-flex justify-content-center gap-2">
 
-                                                    {{-- Tombol Detail (Hitam / Dark) --}}
                                                     <a href="{{ route('profil.show', $item->profil_id) }}"
                                                         class="btn btn-sm btn-outline-dark mb-0 px-3" title="Lihat Detail">
                                                         <i class="material-icons text-sm me-1">visibility</i> Detail
                                                     </a>
 
-                                                    {{-- Tombol Edit (Cyan / Info) --}}
                                                     <a href="{{ route('profil.edit', $item->profil_id) }}"
                                                         class="btn btn-sm btn-outline-info mb-0 px-3" title="Edit Data">
                                                         <i class="material-icons text-sm me-1">edit</i> Edit
                                                     </a>
 
-                                                    {{-- Tombol Hapus (Merah / Danger) --}}
                                                     <form action="{{ route('profil.destroy', $item->profil_id) }}"
                                                         method="POST" style="display:inline"
                                                         onsubmit="return confirm('Yakin ingin menghapus data profil desa ini?')">

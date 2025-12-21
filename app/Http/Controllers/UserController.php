@@ -14,11 +14,10 @@ class UserController extends Controller
      * Menampilkan daftar user
      */
     // V 1. Ubah method index()
-    public function index(Request $request) // Tambahkan Request $request
+    public function index(Request $request)
     {
-        // Tentukan kolom
-        $filterableColumns = ['role']; // Tidak ada filter dropdown untuk User saat ini
-        $searchableColumns = ['name', 'email']; // Kolom yang ingin dicari
+        $filterableColumns = ['role'];
+        $searchableColumns = ['name', 'email'];
 
         // Terapkan scope, paginate, dan withQueryString
         $items = User::filter($request, $filterableColumns)
@@ -30,7 +29,7 @@ class UserController extends Controller
         return view('pages.user.index', compact('items'));
     }
 
-    
+
 
     // Tampilkan form pembuatan user
     public function create()
@@ -50,14 +49,14 @@ class UserController extends Controller
         ]);
 
         $data['password'] = Hash::make($data['password']);
-        
+
         // 1. Buat User
         $user = User::create($data);
 
         // 2. Upload Foto Profil (Jika ada)
         if ($request->hasFile('avatar')) {
             $path = $request->file('avatar')->store('uploads/users', 'public');
-            
+
             Media::create([
                 'ref_table' => 'users',
                 'ref_id'    => $user->id,
@@ -106,7 +105,7 @@ class UserController extends Controller
         if ($request->hasFile('avatar')) {
             // 1. Cari foto lama
             $oldAvatar = $user->media()->where('caption', 'avatar')->first();
-            
+
             // 2. Hapus foto lama
             if ($oldAvatar) {
                 if (Storage::disk('public')->exists($oldAvatar->file_url)) {
@@ -126,13 +125,13 @@ class UserController extends Controller
             ]);
         }
 
-        return redirect()->route('user.index')->with('success', 'User berhasil diperbarui');
+        return redirect()->route ('user.index')->with('success', 'User berhasil diperbarui');
     }
 
     // Hapus user
     public function destroy(User $user)
     {
-        
+
         $user->load('media');
         foreach ($user->media as $media) {
             if (Storage::disk('public')->exists($media->file_url)) {

@@ -45,45 +45,30 @@
                     <ul class="dropdown-menu dropdown-menu-end px-2 py-3 me-sm-n4" aria-labelledby="userDropdown">
 
                         <li class="mb-2">
-                            <a class="dropdown-item border-radius-md" href="javascript:;">
+
+                            <a class="dropdown-item border-radius-md" href="{{ route('user.edit', auth()->user()->id) }}">
                                 <div class="d-flex py-1">
+                                    <div class="my-auto">
+
+                                        <i class="material-icons me-2">account_circle</i>
+                                    </div>
                                     <div class="d-flex flex-column justify-content-center">
                                         <h6 class="text-sm font-weight-normal mb-1">
-                                            <i class="fa fa-user me-2"></i> My Profile
+                                            My Profile
                                         </h6>
                                     </div>
                                 </div>
                             </a>
                         </li>
 
-                        <li class="mb-2">
-                            <a class="dropdown-item border-radius-md" href="javascript:;">
-                                <div class="d-flex py-1">
-                                    <div class="d-flex flex-column justify-content-center">
-                                        <h6 class="text-sm font-weight-normal mb-1">
-                                            <i class="fa fa-cog me-2"></i> Settings
-                                        </h6>
-                                    </div>
-                                </div>
-                            </a>
-                        </li>
 
-                        <li class="mb-2">
-                            <a class="dropdown-item border-radius-md" href="javascript:;">
-                                <div class="d-flex py-1">
-                                    <div class="d-flex flex-column justify-content-center">
-                                        <h6 class="text-sm font-weight-normal mb-1">
-                                            <i class="fa fa-envelope me-2"></i> Messages
-                                        </h6>
-                                    </div>
-                                </div>
-                            </a>
-                        </li>
+
+
 
                         <li class="mb-2">
                             <div class="dropdown-item border-radius-md" style="cursor: default; pointer-events: none;">
                                 <div class="d-flex py-1 align-items-center">
-                                    <i class="fa fa-globe me-2"></i>
+                                    <i class="material-icons me-2 text-secondary" style="font-size: 1.2rem;">history</i>
                                     <div class="d-flex flex-column justify-content-center">
                                         <h6 class="text-sm font-weight-normal mb-0">
                                             {{ session('last_login') ?? \Carbon\Carbon::now()->setTimezone('Asia/Jakarta')->toDateTimeString() }}
@@ -96,12 +81,16 @@
                         <hr class="horizontal dark my-2">
 
                         <li>
-                            <form action="{{ route('logout') }}" method="POST">
+                            <form action="{{ route('logout') }}" method="POST"style="display: inline;">
                                 @csrf
                                 <button type="submit" class="dropdown-item border-radius-md text-danger">
                                     <div class="d-flex py-1 align-items-center">
-                                        <i class="fa fa-sign-out me-2"></i>
-                                        <span class="font-weight-bold">Logout</span>
+                                        <i class="material-icons me-2 text-danger" style="font-size: 1.2rem;">logout</i>
+                                        <div class="d-flex flex-column justify-content-center">
+                                            <h6 class="text-sm font-weight-bold mb-0 text-danger">
+                                                Logout
+                                            </h6>
+                                        </div>
                                     </div>
                                 </button>
                             </form>

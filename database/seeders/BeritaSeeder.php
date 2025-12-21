@@ -17,7 +17,7 @@ class BeritaSeeder extends Seeder
      */
     public function run()
     {
-        $faker = Faker::create('id_ID');
+        $faker = Faker::create ('id_ID');
 
         // 1. Ambil SEMUA ID kategori yang ada di database
         $kategoriIds = KategoriBerita::pluck('kategori_id')->all(); // Pastikan kolom primary key-nya 'id'
